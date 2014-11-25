@@ -3,17 +3,13 @@ package pt.ua.it.atnog.wsGw;
 import com.eclipsesource.json.JsonObject;
 import org.eclipse.jetty.websocket.api.RemoteEndpoint;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
-import pt.ua.it.atnog.wsGw.task.Task;
-import pt.ua.it.atnog.wsGw.task.TaskSub;
-import pt.ua.it.atnog.wsGw.task.TaskTopics;
-import pt.ua.it.atnog.wsGw.task.TaskUnSub;
+import pt.ua.it.atnog.wsGw.task.*;
 
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
 public class WSConn extends WebSocketAdapter {
     private BlockingQueue<Task> queue;
-    private String key;
     private boolean open;
 
     public WSConn(BlockingQueue<Task> queue) {
@@ -33,12 +29,9 @@ public class WSConn extends WebSocketAdapter {
                 case "sub":
                     queue.put(new TaskSub(json.get("topic").asString(), this));
                     break;
+                case "unsub":
+                    queue.put(new TaskUnSub(json.get("topic").asString(), this));
             }
-            /*} else if (type.equals("sub")) {
-                String oldKey = key;
-				key = json.get("entity").asString();
-				queue.put(new MsgModConn(oldKey, key, this));
-			}*/
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -62,7 +55,7 @@ public class WSConn extends WebSocketAdapter {
     public void onWebSocketClose(int statusCode, String reason) {
         open = false;
         try {
-            queue.put(new TaskUnSub(key, this));
+            queue.put(new TaskUnSubAll(this));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

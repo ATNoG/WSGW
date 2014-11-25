@@ -53,6 +53,12 @@ public class Storage {
         }
     }
 
+    public void remove(WSConn conn) {
+        for (Map.Entry<String,Item> entry : map.entrySet()) {
+            entry.getValue().conns.remove(conn);
+        }
+    }
+
     public List<String> keys() {
         return new ArrayList<String>(map.keySet());
     }

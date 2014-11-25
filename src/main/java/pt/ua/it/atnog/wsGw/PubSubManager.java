@@ -9,11 +9,11 @@ import java.util.concurrent.BlockingQueue;
 public class PubSubManager implements Runnable {
     private BlockingQueue<Task> queue;
     private boolean done;
-    private Storage db;
+    private Storage storage;
 
     public PubSubManager(BlockingQueue<Task> queue) {
         this.queue = queue;
-        this.db = new Storage();
+        this.storage = new Storage();
         this.done = false;
     }
 
@@ -21,30 +21,33 @@ public class PubSubManager implements Runnable {
         while (!done) {
             try {
                 Task task = queue.take();
-                switch (task.type()) {
+                switch (task.type) {
                     case "pub": {
                         TaskPub msg = (TaskPub) task;
-                        System.err.println(msg.data());
-                        JsonObject json = JsonObject.readFrom(msg.data());
+                        System.err.println(msg.data);
+                        JsonObject json = JsonObject.readFrom(msg.data);
                         String topic = json.get("topic").asString();
-                        db.add(topic, msg.data());
+                        storage.add(topic, msg.data);
                         break;
                     }
                     case "sub":
-                        db.add(((TaskSub) task).topic(), ((TaskSub) task).conn());
+                        storage.add(((TaskSub) task).topic, ((TaskSub) task).conn);
                         break;
                     case "unsub":
-                        db.remove(((TaskUnSub) task).topic(), ((TaskUnSub) task).conn());
+                        storage.remove(((TaskUnSub) task).topic, ((TaskUnSub) task).conn);
+                        break;
+                    case "unsuball":
+                        storage.remove(((TaskUnSub) task).conn);
                         break;
                     case "topics": {
                         TaskTopics msg = (TaskTopics) task;
                         JsonObject json = new JsonObject();
                         JsonArray array = new JsonArray();
-                        for (String topic : db.keys())
+                        for (String topic : storage.keys())
                             array.add(topic);
                         json.add("topics", array);
                         System.err.println(json);
-                        msg.conn().sendString(json.toString());
+                        msg.conn.sendString(json.toString());
                         break;
                     }
                 }
