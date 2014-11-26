@@ -20,34 +20,31 @@ public class PubSubManager implements Runnable {
     public void run() {
         while (!done) {
             try {
-                Task task = queue.take();
-                switch (task.type) {
+                Task t = queue.take();
+                switch (t.type) {
                     case "pub": {
-                        TaskPub msg = (TaskPub) task;
-                        System.err.println(msg.data);
-                        JsonObject json = JsonObject.readFrom(msg.data);
-                        String topic = json.get("topic").asString();
-                        storage.add(topic, msg.data);
+                        TaskPub task = (TaskPub) t;
+                        JsonObject json = JsonObject.readFrom(task.data);
+                        storage.add(json.get("topic").asString(), task.data);
                         break;
                     }
                     case "sub":
-                        storage.add(((TaskSub) task).topic, ((TaskSub) task).conn);
+                        storage.add(((TaskSub) t).topic, ((TaskSub) t).conn);
                         break;
                     case "unsub":
-                        storage.remove(((TaskUnSub) task).topic, ((TaskUnSub) task).conn);
+                        storage.remove(((TaskUnSub) t).topic, ((TaskUnSub) t).conn);
                         break;
                     case "unsuball":
-                        storage.remove(((TaskUnSub) task).conn);
+                        storage.remove(((TaskUnSubAll) t).conn);
                         break;
                     case "topics": {
-                        TaskTopics msg = (TaskTopics) task;
-                        JsonObject json = new JsonObject();
+                        TaskTopics task = (TaskTopics) t;
                         JsonArray array = new JsonArray();
                         for (String topic : storage.keys())
                             array.add(topic);
+                        JsonObject json = new JsonObject();
                         json.add("topics", array);
-                        System.err.println(json);
-                        msg.conn.sendString(json.toString());
+                        task.conn.sendString(json.toString());
                         break;
                     }
                 }

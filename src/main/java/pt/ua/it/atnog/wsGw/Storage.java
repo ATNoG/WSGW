@@ -1,5 +1,7 @@
 package pt.ua.it.atnog.wsGw;
 
+import pt.it.av.atnog.utils.structures.RingBuffer;
+
 import java.util.*;
 
 public class Storage {
