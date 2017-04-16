@@ -1,6 +1,6 @@
 package pt.ua.it.atnog.wsGw;
 
-import pt.it.av.atnog.utils.structures.RingBuffer;
+import pt.it.av.atnog.utils.structures.CircularQueue;
 
 import java.util.*;
 
@@ -56,7 +56,7 @@ public class Storage {
     }
 
     public void remove(WSConn conn) {
-        for (Map.Entry<String,Item> entry : map.entrySet()) {
+        for (Map.Entry<String, Item> entry : map.entrySet()) {
             entry.getValue().conns.remove(conn);
         }
     }
@@ -67,6 +67,6 @@ public class Storage {
 
     private class Item {
         public List<WSConn> conns = new LinkedList<WSConn>();
-        public RingBuffer<String> buffer = new RingBuffer<String>();
+        public CircularQueue<String> buffer = new CircularQueue<String>();
     }
 }

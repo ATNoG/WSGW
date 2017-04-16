@@ -6,25 +6,43 @@ import pt.ua.it.atnog.wsGw.task.*;
 
 import java.util.concurrent.BlockingQueue;
 
-public class PubSubManager implements Runnable {
-    private BlockingQueue<Task> queue;
+public class Dispatcher implements Runnable {
+    private final Thread t;
+    private final BlockingQueue<Task> queue;
+    private final Storage storage;
     private boolean done;
-    private Storage storage;
 
-    public PubSubManager(BlockingQueue<Task> queue) {
+
+    public Dispatcher(BlockingQueue<Task> queue) {
         this.queue = queue;
-        this.storage = new Storage();
-        this.done = false;
+        storage = new Storage();
+        t = new Thread(this);
+        done = false;
     }
 
+    public void start() {
+        t.start();
+    }
+
+    public void join() {
+        try {
+            queue.put(new TaskShutdown());
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void run() {
         while (!done) {
             try {
                 Task t = queue.take();
-                switch (t.type) {
+                switch (t.type()) {
                     case "pub": {
                         TaskPub task = (TaskPub) t;
                         JsonObject json = JsonObject.readFrom(task.data);
+                        System.out.println(json);
                         storage.add(json.get("topic").asString(), task.data);
                         break;
                     }
@@ -45,6 +63,10 @@ public class PubSubManager implements Runnable {
                         JsonObject json = new JsonObject();
                         json.add("topics", array);
                         task.conn.sendString(json.toString());
+                        break;
+                    }
+                    case "shutdown": {
+                        done = true;
                         break;
                     }
                 }

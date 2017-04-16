@@ -17,8 +17,7 @@ public class WSEndpoint {
         p.setProperty("org.eclipse.jetty.LEVEL", "WARN");
         org.eclipse.jetty.util.log.StdErrLog.setProperties(p);
         server = new Server(port);
-        ServletContextHandler context = new ServletContextHandler(
-                ServletContextHandler.SESSIONS);
+        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.addServlet(new ServletHolder(new WSServlet(queue)), "/pubsub/");
         server.setHandler(context);
     }
@@ -31,7 +30,7 @@ public class WSEndpoint {
         }
     }
 
-    public void stop() {
+    public void join() {
         try {
             server.stop();
             server.join();
