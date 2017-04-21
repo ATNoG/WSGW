@@ -1,8 +1,8 @@
 package pt.ua.it.atnog.wsGw;
 
-import com.eclipsesource.json.JsonObject;
 import org.eclipse.jetty.websocket.api.RemoteEndpoint;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
+import pt.it.av.atnog.utils.json.JSONObject;
 import pt.ua.it.atnog.wsGw.task.*;
 
 import java.io.IOException;
@@ -19,8 +19,7 @@ public class WSConn extends WebSocketAdapter {
 
     public void onWebSocketText(String message) {
         try {
-            System.err.println(message);
-            JsonObject json = JsonObject.readFrom(message);
+            JSONObject json = JSONObject.read(message);
             String type = json.get("type").asString();
             switch (type) {
                 case "topics":

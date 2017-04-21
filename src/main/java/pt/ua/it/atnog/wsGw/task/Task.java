@@ -10,6 +10,9 @@ public class Task {
         this.type = type;
     }
 
+    /**
+     * @return
+     */
     public String type() {
         return type;
     }

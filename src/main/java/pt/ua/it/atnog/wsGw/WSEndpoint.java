@@ -15,7 +15,7 @@ public class WSEndpoint {
     public WSEndpoint(BlockingQueue<Task> queue, int port) {
         Properties p = new Properties();
         p.setProperty("org.eclipse.jetty.LEVEL", "WARN");
-        org.eclipse.jetty.util.log.StdErrLog.setProperties(p);
+        //org.eclipse.jetty.util.log.StdErrLog.setProperties(p);
         server = new Server(port);
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.addServlet(new ServletHolder(new WSServlet(queue)), "/pubsub/");

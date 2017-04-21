@@ -1,12 +1,16 @@
 package pt.ua.it.atnog.wsGw;
 
-import com.eclipsesource.json.JsonArray;
-import com.eclipsesource.json.JsonObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import pt.it.av.atnog.utils.Utils;
+import pt.it.av.atnog.utils.json.JSONArray;
+import pt.it.av.atnog.utils.json.JSONObject;
 import pt.ua.it.atnog.wsGw.task.*;
 
 import java.util.concurrent.BlockingQueue;
 
 public class Dispatcher implements Runnable {
+    private final Logger logger = LoggerFactory.getLogger(Dispatcher.class);
     private final Thread t;
     private final BlockingQueue<Task> queue;
     private final Storage storage;
@@ -41,28 +45,26 @@ public class Dispatcher implements Runnable {
                 switch (t.type()) {
                     case "pub": {
                         TaskPub task = (TaskPub) t;
-                        JsonObject json = JsonObject.readFrom(task.data);
-                        System.out.println(json);
-                        storage.add(json.get("topic").asString(), task.data);
+                        storage.put(task.data().get("topic").asString(), task.data());
                         break;
                     }
                     case "sub":
-                        storage.add(((TaskSub) t).topic, ((TaskSub) t).conn);
+                        storage.put(((TaskSub) t).topic(), ((TaskSub) t).wsconn());
                         break;
                     case "unsub":
-                        storage.remove(((TaskUnSub) t).topic, ((TaskUnSub) t).conn);
+                        storage.remove(((TaskUnSub) t).topic(), ((TaskUnSub) t).wsconn());
                         break;
                     case "unsuball":
-                        storage.remove(((TaskUnSubAll) t).conn);
+                        storage.remove(((TaskUnSubAll) t).wsconn());
                         break;
                     case "topics": {
                         TaskTopics task = (TaskTopics) t;
-                        JsonArray array = new JsonArray();
+                        JSONArray array = new JSONArray();
                         for (String topic : storage.keys())
                             array.add(topic);
-                        JsonObject json = new JsonObject();
-                        json.add("topics", array);
-                        task.conn.sendString(json.toString());
+                        JSONObject json = new JSONObject();
+                        json.put("topics", array);
+                        task.wsconn().sendString(json.toString());
                         break;
                     }
                     case "shutdown": {
@@ -71,7 +73,7 @@ public class Dispatcher implements Runnable {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error(Utils.stackTrace(e));
                 done = true;
             }
         }

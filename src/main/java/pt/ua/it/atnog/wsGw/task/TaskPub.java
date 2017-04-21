@@ -1,10 +1,16 @@
 package pt.ua.it.atnog.wsGw.task;
 
-public class TaskPub extends Task {
-    public final String data;
+import pt.it.av.atnog.utils.json.JSONObject;
 
-    public TaskPub(String data) {
+public class TaskPub extends Task {
+    private final JSONObject data;
+
+    public TaskPub(JSONObject data) {
         super("pub");
         this.data = data;
+    }
+
+    public JSONObject data() {
+        return data;
     }
 }

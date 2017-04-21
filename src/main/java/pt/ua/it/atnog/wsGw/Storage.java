@@ -1,72 +1,70 @@
 package pt.ua.it.atnog.wsGw;
 
+import pt.it.av.atnog.utils.json.JSONObject;
 import pt.it.av.atnog.utils.structures.CircularQueue;
+import pt.it.av.atnog.utils.structures.tuple.Pair;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class Storage {
-    private final Map<String, Item> map;
+public class Storage extends HashMap<String, Pair<List<WSConn>, CircularQueue<JSONObject>>> {
 
-    public Storage() {
-        this.map = new HashMap<String, Item>();
-    }
-
-    public void add(String topic, String data) {
-        Item item = null;
-        if (map.containsKey(topic)) {
-            item = map.get(topic);
-            for (WSConn c : item.conns) {
+    /**
+     * @param topic
+     * @param data
+     */
+    public void put(String topic, JSONObject data) {
+        Pair<List<WSConn>, CircularQueue<JSONObject>> item = null;
+        if (containsKey(topic)) {
+            item = get(topic);
+            for (WSConn c : item.a) {
                 try {
-                    c.getRemote().sendString(data);
+                    c.getRemote().sendString(data.toString());
                 } catch (Exception e) {
                     e.printStackTrace();
-                    item.conns.remove(c);
+                    item.a.remove(c);
                 }
             }
         } else {
-            item = new Item();
-            map.put(topic, item);
+            item = new Pair<>(new ArrayList<WSConn>(), new CircularQueue<JSONObject>());
+            put(topic, item);
         }
-        item.buffer.add(data);
+        item.b.add(data);
     }
 
-    public void add(String topic, WSConn conn) {
-        Item item = null;
-        if (map.containsKey(topic)) {
-            item = map.get(topic);
-            for (String datum : item.buffer) {
+    public void put(String topic, WSConn conn) {
+        Pair<List<WSConn>, CircularQueue<JSONObject>> item = null;
+        if (containsKey(topic)) {
+            item = get(topic);
+            for (JSONObject datum : item.b) {
                 try {
-                    conn.remote().sendString(datum);
+                    conn.remote().sendString(datum.toString());
                 } catch (Exception e) {
                     e.printStackTrace();
-                    item.conns.remove(conn);
+                    item.a.remove(conn);
                 }
             }
         } else {
-            item = new Item();
-            map.put(topic, item);
+            item = new Pair<>(new ArrayList<WSConn>(), new CircularQueue<JSONObject>());
+            put(topic, item);
         }
-        item.conns.add(conn);
+        item.a.add(conn);
     }
 
     public void remove(String topic, WSConn conn) {
-        if (map.containsKey(topic)) {
-            map.get(topic).conns.remove(conn);
-        }
+        if (containsKey(topic))
+            get(topic).a.remove(conn);
     }
 
     public void remove(WSConn conn) {
-        for (Map.Entry<String, Item> entry : map.entrySet()) {
-            entry.getValue().conns.remove(conn);
+        for (Map.Entry<String, Pair<List<WSConn>, CircularQueue<JSONObject>>> entry : entrySet()) {
+            entry.getValue().a.remove(conn);
         }
     }
 
     public List<String> keys() {
-        return new ArrayList<String>(map.keySet());
-    }
-
-    private class Item {
-        public List<WSConn> conns = new LinkedList<WSConn>();
-        public CircularQueue<String> buffer = new CircularQueue<String>();
+        return new ArrayList<String>(keySet());
     }
 }

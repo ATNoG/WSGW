@@ -3,10 +3,14 @@ package pt.ua.it.atnog.wsGw.task;
 import pt.ua.it.atnog.wsGw.WSConn;
 
 public class TaskTopics extends Task {
-    public final WSConn conn;
+    private final WSConn wsconn;
 
-    public TaskTopics(WSConn conn) {
+    public TaskTopics(WSConn wsconn) {
         super("topics");
-        this.conn = conn;
+        this.wsconn = wsconn;
+    }
+
+    public WSConn wsconn() {
+        return wsconn;
     }
 }
