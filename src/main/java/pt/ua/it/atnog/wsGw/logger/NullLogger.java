@@ -3,7 +3,10 @@ package pt.ua.it.atnog.wsGw.logger;
 import org.eclipse.jetty.util.log.Logger;
 
 /**
+ * Null logger to suppress the logging messages of jetty.
  *
+ * @author <a href="mailto:mariolpantunes@gmail.com">Mário Antunes</a>
+ * @version 1.0
  */
 public class NullLogger implements Logger {
     @Override
