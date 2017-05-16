@@ -1,4 +1,4 @@
-package pt.ua.it.atnog.wsGw.task;
+package pt.ua.it.atnog.wsgw.task;
 
 /**
  * TaskShutdown class.
@@ -8,11 +8,11 @@ package pt.ua.it.atnog.wsGw.task;
  * @version 1.0
  */
 public class TaskShutdown extends Task {
-    /**
-     * TaskShutdown constructor.
-     * Constructs a TaskShutdown object.
-     */
-    public TaskShutdown() {
-        super("shutdown");
-    }
+  /**
+   * TaskShutdown constructor.
+   * Constructs a TaskShutdown object.
+   */
+  public TaskShutdown() {
+    super("shutdown");
+  }
 }
