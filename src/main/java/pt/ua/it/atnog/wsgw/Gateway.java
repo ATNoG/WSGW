@@ -5,8 +5,10 @@ import org.slf4j.LoggerFactory;
 import pt.ua.it.atnog.wsgw.logger.NullLogger;
 import pt.ua.it.atnog.wsgw.task.Task;
 
+import java.io.FileInputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -33,12 +35,19 @@ public class Gateway {
     org.eclipse.jetty.util.log.Log.setLog(new NullLogger());
     final Logger logger = LoggerFactory.getLogger(Gateway.class);
     logger.info("WebSocket Gateway");
+
+    Properties prop = new Properties();
+    prop.load(new FileInputStream(args[0]));
+
     BlockingQueue<Task> queue = new LinkedBlockingQueue<Task>();
 
-    Dispatcher pubSubManager = new Dispatcher(queue);
-    WsEndpoint wsEndpoint = new WsEndpoint(queue, 8081);
+    Dispatcher pubSubManager = new Dispatcher(queue,
+        Integer.parseInt(prop.getProperty("QueueSize")));
+    WsEndpoint wsEndpoint = new WsEndpoint(queue,
+        Integer.parseInt(prop.getProperty("WebSocketPort")));
     UdpEndpoint udpEndpoint = new UdpEndpoint(queue,
-        new InetSocketAddress(InetAddress.getLocalHost(), 8888));
+        new InetSocketAddress(InetAddress.getLocalHost(),
+            Integer.parseInt(prop.getProperty("UDPPort"))));
 
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
       udpEndpoint.join();

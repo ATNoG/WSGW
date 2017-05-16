@@ -22,6 +22,17 @@ import java.util.Map;
  * @version 1.0
  */
 public class Storage extends HashMap<String, Pair<List<WsConn>, CircularQueue<JSONObject>>> {
+  private final int qSize;
+
+  /**
+   * Storage constructor.
+   * Constructs a {@link Storage} and limits the size of the {@link CircularQueue} to qSize.
+   *
+   * @param qSize maximum number of values in the {@link CircularQueue}.
+   */
+  public Storage(final int qSize) {
+    this.qSize = qSize;
+  }
 
   /**
    * Insert data related to a topic in the storage.
@@ -42,7 +53,7 @@ public class Storage extends HashMap<String, Pair<List<WsConn>, CircularQueue<JS
         }
       }
     } else {
-      item = new Pair<>(new ArrayList<WsConn>(), new CircularQueue<JSONObject>());
+      item = new Pair<>(new ArrayList<WsConn>(), new CircularQueue<JSONObject>(qSize));
       put(topic, item);
     }
     item.b.add(data);

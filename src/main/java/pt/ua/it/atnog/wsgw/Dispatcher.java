@@ -41,9 +41,9 @@ public class Dispatcher implements Runnable {
    *
    * @param queue {@link BlockingQueue} used to receive tasks.
    */
-  public Dispatcher(BlockingQueue<Task> queue) {
+  public Dispatcher(final BlockingQueue<Task> queue, final int qSize) {
     this.queue = queue;
-    storage = new Storage();
+    storage = new Storage(qSize);
     thread = new Thread(this);
     done = false;
   }
