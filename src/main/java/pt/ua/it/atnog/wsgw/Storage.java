@@ -86,7 +86,7 @@ public class Storage extends HashMap<String, Pair<List<WsConn>, CircularQueue<JS
         }
       }
     } else {
-      item = new Pair<>(new ArrayList<WsConn>(), new CircularQueue<JSONObject>());
+      item = new Pair<>(new ArrayList<WsConn>(), new CircularQueue<JSONObject>(qSize));
       put(topic, item);
     }
     item.a.add(conn);
