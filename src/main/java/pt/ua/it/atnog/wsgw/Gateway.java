@@ -6,7 +6,6 @@ import pt.ua.it.atnog.wsgw.logger.NullLogger;
 import pt.ua.it.atnog.wsgw.task.Task;
 
 import java.io.FileInputStream;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
@@ -46,7 +45,7 @@ public class Gateway {
     WsEndpoint wsEndpoint = new WsEndpoint(queue,
         Integer.parseInt(prop.getProperty("WebSocketPort")));
     UdpEndpoint udpEndpoint = new UdpEndpoint(queue,
-        new InetSocketAddress(InetAddress.getLocalHost(),
+        new InetSocketAddress(new InetSocketAddress(0).getAddress(),
             Integer.parseInt(prop.getProperty("UDPPort"))));
 
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {

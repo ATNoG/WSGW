@@ -1,9 +1,13 @@
 package pt.ua.it.atnog.wsgw;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import pt.it.av.atnog.utils.Utils;
 import pt.it.av.atnog.utils.json.JSONObject;
 import pt.it.av.atnog.utils.structures.CircularQueue;
 import pt.it.av.atnog.utils.structures.tuple.Pair;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +26,7 @@ import java.util.Map;
  * @version 1.0
  */
 public class Storage extends HashMap<String, Pair<List<WsConn>, CircularQueue<JSONObject>>> {
+  private final Logger logger = LoggerFactory.getLogger(Storage.class);
   private final int qSize;
 
   /**
@@ -41,15 +46,17 @@ public class Storage extends HashMap<String, Pair<List<WsConn>, CircularQueue<JS
    * @param data  {@link JSONObject} that contains the the data.
    */
   public void put(String topic, JSONObject data) {
+
     Pair<List<WsConn>, CircularQueue<JSONObject>> item = null;
     if (containsKey(topic)) {
       item = get(topic);
       for (WsConn c : item.a) {
         try {
           c.getRemote().sendString(data.toString());
-        } catch (Exception e) {
-          e.printStackTrace();
+        } catch (IOException e) {
+          logger.error(Utils.stackTrace(e));
           item.a.remove(c);
+          logger.warn("Removed WsConn" + c.toString());
         }
       }
     } else {
@@ -72,9 +79,10 @@ public class Storage extends HashMap<String, Pair<List<WsConn>, CircularQueue<JS
       for (JSONObject datum : item.b) {
         try {
           conn.remote().sendString(datum.toString());
-        } catch (Exception e) {
-          e.printStackTrace();
+        } catch (IOException e) {
+          logger.error(Utils.stackTrace(e));
           item.a.remove(conn);
+          logger.warn("Removed WsConn" + conn.toString());
         }
       }
     } else {

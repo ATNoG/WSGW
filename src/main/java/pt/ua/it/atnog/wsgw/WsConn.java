@@ -4,6 +4,7 @@ import org.eclipse.jetty.websocket.api.RemoteEndpoint;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pt.it.av.atnog.utils.Utils;
 import pt.it.av.atnog.utils.json.JSONObject;
 import pt.ua.it.atnog.wsgw.task.Task;
 import pt.ua.it.atnog.wsgw.task.TaskSub;
@@ -59,8 +60,11 @@ public class WsConn extends WebSocketAdapter {
           logger.warn("Unknown task: " + type);
           break;
       }
-    } catch (Exception e) {
-      e.printStackTrace();
+    } catch (InterruptedException e) {
+      logger.error(Utils.stackTrace(e));
+    } catch (IOException e) {
+      logger.error(Utils.stackTrace(e));
+      logger.warn("Skip WS packet.");
     }
   }
 
@@ -83,7 +87,7 @@ public class WsConn extends WebSocketAdapter {
       try {
         remote().sendString(txt);
       } catch (IOException e) {
-        e.printStackTrace();
+        logger.error(Utils.stackTrace(e));
         onWebSocketClose(0, null);
       }
     }
@@ -95,8 +99,13 @@ public class WsConn extends WebSocketAdapter {
     try {
       queue.put(new TaskUnsuball(this));
     } catch (InterruptedException e) {
-      e.printStackTrace();
+      logger.error(Utils.stackTrace(e));
     }
     super.onWebSocketClose(statusCode, reason);
+  }
+
+  @Override
+  public String toString() {
+    return getSession().getRemoteAddress() + "; Is Connected: " + isConnected();
   }
 }

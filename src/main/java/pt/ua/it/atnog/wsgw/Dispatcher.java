@@ -52,6 +52,7 @@ public class Dispatcher implements Runnable {
    * Starts the dispatcher thread.
    */
   public void start() {
+    logger.trace("Start.");
     thread.start();
   }
 
@@ -61,56 +62,60 @@ public class Dispatcher implements Runnable {
    */
   public void join() {
     try {
+      logger.trace("Join.");
       queue.put(new TaskShutdown());
       thread.join();
     } catch (InterruptedException e) {
-      e.printStackTrace();
+      logger.error(Utils.stackTrace(e));
     }
   }
 
   @Override
   public void run() {
     while (!done) {
+      Task task;
       try {
-        Task task = queue.take();
-        switch (task.type()) {
-          case "pub": {
-            TaskPub taskp = (TaskPub) task;
-            storage.put(taskp.data().get("topic").asString(), taskp.data());
-            break;
-          }
-          case "sub":
-            storage.put(((TaskSub) task).topic(), ((TaskSub) task).wsconn());
-            break;
-          case "unsub":
-            storage.remove(((TaskUnsub) task).topic(), ((TaskUnsub) task).wsconn());
-            break;
-          case "unsuball":
-            storage.remove(((TaskUnsuball) task).wsconn());
-            break;
-          case "topics": {
-            TaskTopics taskt = (TaskTopics) task;
-            JSONArray array = new JSONArray();
-            for (String topic : storage.keys()) {
-              array.add(topic);
-            }
-            JSONObject json = new JSONObject();
-            json.put("topics", array);
-            taskt.wsconn().sendString(json.toString());
-            break;
-          }
-          case "shutdown": {
-            done = true;
-            break;
-          }
-          default: {
-            logger.warn("Unknown task: " + task.type());
-            break;
-          }
-        }
-      } catch (Exception e) {
+        task = queue.take();
+        logger.trace(task.toString());
+      } catch (InterruptedException e) {
         logger.error(Utils.stackTrace(e));
-        done = true;
+        task = new TaskShutdown();
+      }
+
+      switch (task.type()) {
+        case "pub": {
+          TaskPub taskp = (TaskPub) task;
+          storage.put(taskp.data().get("topic").asString(), taskp.data());
+          break;
+        }
+        case "sub":
+          storage.put(((TaskSub) task).topic(), ((TaskSub) task).wsconn());
+          break;
+        case "unsub":
+          storage.remove(((TaskUnsub) task).topic(), ((TaskUnsub) task).wsconn());
+          break;
+        case "unsuball":
+          storage.remove(((TaskUnsuball) task).wsconn());
+          break;
+        case "topics": {
+          TaskTopics taskt = (TaskTopics) task;
+          JSONArray array = new JSONArray();
+          for (String topic : storage.keys()) {
+            array.add(topic);
+          }
+          JSONObject json = new JSONObject();
+          json.put("topics", array);
+          taskt.wsconn().sendString(json.toString());
+          break;
+        }
+        case "shutdown": {
+          done = true;
+          break;
+        }
+        default: {
+          logger.warn("Unknown task: " + task.type());
+          break;
+        }
       }
     }
   }

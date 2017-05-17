@@ -7,6 +7,7 @@ import pt.it.av.atnog.utils.json.JSONObject;
 import pt.ua.it.atnog.wsgw.task.Task;
 import pt.ua.it.atnog.wsgw.task.TaskPub;
 
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketAddress;
@@ -64,7 +65,7 @@ public class UdpEndpoint implements Runnable {
       tmpSocket.send(tmpPacket);
       tmpSocket.close();
       thread.join();
-    } catch (Exception e) {
+    } catch (IOException | InterruptedException e) {
       logger.error(Utils.stackTrace(e));
     }
   }
@@ -77,13 +78,12 @@ public class UdpEndpoint implements Runnable {
 
       byte[] data = new byte[1024];
       DatagramPacket packet = new DatagramPacket(data, data.length);
-
       while (!done) {
-        logger.info("UDP endpoint receiving.");
+        logger.trace("UDP endpoint receiving.");
         socket.receive(packet);
         JSONObject json = JSONObject.read(new String(
             packet.getData(), packet.getOffset(), packet.getLength()));
-        logger.info("UDP packet received: " + json.toString());
+        logger.trace("UDP packet received: " + json.toString());
         if (json.contains("done")) {
           done = true;
         } else {
@@ -92,7 +92,7 @@ public class UdpEndpoint implements Runnable {
       }
     } catch (Exception e) {
       logger.error(Utils.stackTrace(e));
-      done = true;
+      logger.warn("Skip UPD packet.");
     } finally {
       if (socket != null) {
         socket.close();

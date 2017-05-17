@@ -3,6 +3,9 @@ package pt.ua.it.atnog.wsgw;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import pt.it.av.atnog.utils.Utils;
 import pt.ua.it.atnog.wsgw.task.Task;
 
 import java.util.concurrent.BlockingQueue;
@@ -18,7 +21,8 @@ import java.util.concurrent.BlockingQueue;
  * @version 1.0
  */
 public class WsEndpoint {
-  private Server server;
+  private final Logger logger = LoggerFactory.getLogger(WsEndpoint.class);
+  private final Server server;
 
   /**
    * WsEndpoint constructor.
@@ -41,7 +45,7 @@ public class WsEndpoint {
     try {
       server.start();
     } catch (Exception e) {
-      e.printStackTrace();
+      logger.error(Utils.stackTrace(e));
     }
   }
 
@@ -54,7 +58,7 @@ public class WsEndpoint {
       server.stop();
       server.join();
     } catch (Exception e) {
-      e.printStackTrace();
+      logger.error(Utils.stackTrace(e));
     }
   }
 }
