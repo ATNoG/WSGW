@@ -1,6 +1,6 @@
 package pt.ua.it.atnog.wsgw.task;
 
-import pt.ua.it.atnog.wsgw.WsConn;
+import pt.ua.it.atnog.wsgw.Conn;
 
 /**
  * TaskUnsub class.
@@ -11,19 +11,19 @@ import pt.ua.it.atnog.wsgw.WsConn;
  */
 public class TaskUnsub extends Task {
   private final String topic;
-  private final WsConn wsconn;
+  private final Conn conn;
 
   /**
    * TaskUnsub constructor.
    * Construct a TaskUnsub with a specific topic and wsconn.
    *
    * @param topic  topic un-subscribed by an entity.
-   * @param wsconn web-socket connection of the entity.
+   * @param conn web-socket connection of the entity.
    */
-  public TaskUnsub(String topic, WsConn wsconn) {
+  public TaskUnsub(String topic, Conn conn) {
     super("unsub");
     this.topic = topic;
-    this.wsconn = wsconn;
+    this.conn = conn;
   }
 
   /**
@@ -40,7 +40,7 @@ public class TaskUnsub extends Task {
    *
    * @return the web-socket connection of an entity.
    */
-  public WsConn wsconn() {
-    return wsconn;
+  public Conn wsconn() {
+    return conn;
   }
 }

@@ -1,6 +1,6 @@
 package pt.ua.it.atnog.wsgw.task;
 
-import pt.ua.it.atnog.wsgw.WsConn;
+import pt.ua.it.atnog.wsgw.Conn;
 
 /**
  * TaskUnsuball class.
@@ -10,17 +10,17 @@ import pt.ua.it.atnog.wsgw.WsConn;
  * @version 1.0
  */
 public class TaskUnsuball extends Task {
-  private final WsConn wsconn;
+  private final Conn conn;
 
   /**
    * TaskUnsub constructor.
    * Construct a TaskUnsuball with a specific web-socket.
    *
-   * @param wsconn web-socket connection of the entity.
+   * @param conn web-socket connection of the entity.
    */
-  public TaskUnsuball(WsConn wsconn) {
+  public TaskUnsuball(Conn conn) {
     super("unsuball");
-    this.wsconn = wsconn;
+    this.conn = conn;
   }
 
   /**
@@ -28,7 +28,7 @@ public class TaskUnsuball extends Task {
    *
    * @return the web-socket connection of an entity.
    */
-  public WsConn wsconn() {
-    return wsconn;
+  public Conn wsconn() {
+    return conn;
   }
 }

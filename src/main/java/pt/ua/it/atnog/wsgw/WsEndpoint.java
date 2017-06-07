@@ -44,6 +44,7 @@ public class WsEndpoint {
   public void start() {
     try {
       server.start();
+      logger.info("WS Endpoint running.");
     } catch (Exception e) {
       logger.error(Utils.stackTrace(e));
     }
@@ -57,6 +58,7 @@ public class WsEndpoint {
     try {
       server.stop();
       server.join();
+      logger.info("WS Endpoint joined.");
     } catch (Exception e) {
       logger.error(Utils.stackTrace(e));
     }

@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import pt.it.av.atnog.utils.Utils;
 import pt.it.av.atnog.utils.json.JSONObject;
 import pt.ua.it.atnog.wsgw.task.Task;
+import pt.ua.it.atnog.wsgw.task.TaskPub;
 import pt.ua.it.atnog.wsgw.task.TaskSub;
 import pt.ua.it.atnog.wsgw.task.TaskTopics;
 import pt.ua.it.atnog.wsgw.task.TaskUnsub;
@@ -25,8 +26,8 @@ import java.util.concurrent.BlockingQueue;
  * @author <a href="mailto:mariolpantunes@gmail.com">Mário Antunes</a>
  * @version 1.0
  */
-public class WsConn extends WebSocketAdapter {
-  private final Logger logger = LoggerFactory.getLogger(Gateway.class);
+public class WsConn extends WebSocketAdapter implements Conn {
+  private final Logger logger = LoggerFactory.getLogger(WsConn.class);
   private BlockingQueue<Task> queue;
   private boolean open;
 
@@ -47,14 +48,22 @@ public class WsConn extends WebSocketAdapter {
       JSONObject json = JSONObject.read(message);
       String type = json.get("type").asString();
       switch (type) {
-        case "topics":
-          queue.put(new TaskTopics(this));
+        case "pub":
+          queue.put(new TaskPub(json));
           break;
         case "sub":
           queue.put(new TaskSub(json.get("topic").asString(), this));
           break;
         case "unsub":
           queue.put(new TaskUnsub(json.get("topic").asString(), this));
+          break;
+        case "unsuball":
+          queue.put(new TaskUnsuball(this));
+          break;
+        case "topics":
+          queue.put(new TaskTopics(this));
+          break;
+        case "shutdown":
           break;
         default:
           logger.warn("Unknown task: " + type);

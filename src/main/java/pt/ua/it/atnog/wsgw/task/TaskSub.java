@@ -1,6 +1,6 @@
 package pt.ua.it.atnog.wsgw.task;
 
-import pt.ua.it.atnog.wsgw.WsConn;
+import pt.ua.it.atnog.wsgw.Conn;
 
 /**
  * TaskSub class.
@@ -10,20 +10,20 @@ import pt.ua.it.atnog.wsgw.WsConn;
  * @version 1.0
  */
 public class TaskSub extends Task {
-  private final WsConn wsconn;
+  private final Conn conn;
   private final String topic;
 
   /**
    * TaskSub constructor.
    * Construct a TaskSub with a specific topic and wsconn.
    *
-   * @param topic  Topic subscribed by an entity.
-   * @param wsconn web-socket connection of the entity.
+   * @param topic Topic subscribed by an entity.
+   * @param conn Connection of the entity.
    */
-  public TaskSub(String topic, WsConn wsconn) {
+  public TaskSub(String topic, Conn conn) {
     super("sub");
     this.topic = topic;
-    this.wsconn = wsconn;
+    this.conn = conn;
   }
 
   /**
@@ -40,7 +40,7 @@ public class TaskSub extends Task {
    *
    * @return the web-socket connection of an entity.
    */
-  public WsConn wsconn() {
-    return wsconn;
+  public Conn conn() {
+    return conn;
   }
 }

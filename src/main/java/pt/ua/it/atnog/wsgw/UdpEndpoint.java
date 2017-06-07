@@ -6,6 +6,11 @@ import pt.it.av.atnog.utils.Utils;
 import pt.it.av.atnog.utils.json.JSONObject;
 import pt.ua.it.atnog.wsgw.task.Task;
 import pt.ua.it.atnog.wsgw.task.TaskPub;
+import pt.ua.it.atnog.wsgw.task.TaskShutdown;
+import pt.ua.it.atnog.wsgw.task.TaskSub;
+import pt.ua.it.atnog.wsgw.task.TaskTopics;
+import pt.ua.it.atnog.wsgw.task.TaskUnsub;
+import pt.ua.it.atnog.wsgw.task.TaskUnsuball;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -58,13 +63,13 @@ public class UdpEndpoint implements Runnable {
    */
   public void join() {
     try {
-      logger.info("UDP Endpoint stopped.");
       DatagramSocket tmpSocket = new DatagramSocket();
-      byte[] data = "{\"done\":true}".getBytes();
+      byte[] data = "{\"type\":\"shutdown\"}".getBytes();
       DatagramPacket tmpPacket = new DatagramPacket(data, data.length, address);
       tmpSocket.send(tmpPacket);
       tmpSocket.close();
       thread.join();
+      logger.info("UDP Endpoint joined.");
     } catch (IOException | InterruptedException e) {
       logger.error(Utils.stackTrace(e));
     }
@@ -84,15 +89,38 @@ public class UdpEndpoint implements Runnable {
         JSONObject json = JSONObject.read(new String(
             packet.getData(), packet.getOffset(), packet.getLength()));
         logger.trace("UDP packet received: " + json.toString());
-        if (json.contains("done")) {
-          done = true;
-        } else {
-          queue.put(new TaskPub(json));
+        String type = json.get("type").asString();
+        switch (type) {
+          case "pub":
+            queue.put(new TaskPub(json));
+            break;
+          case "sub":
+            queue.put(new TaskSub(json.get("topic").asString(),
+                new UdpConn(queue, packet.getSocketAddress(), socket)));
+            break;
+          case "unsub":
+            queue.put(new TaskUnsub(json.get("topic").asString(),
+                new UdpConn(queue, packet.getSocketAddress(), socket)));
+            break;
+          case "unsuball":
+            queue.put(new TaskUnsuball(new UdpConn(queue, packet.getSocketAddress(), socket)));
+            break;
+          case "topics":
+            queue.put(new TaskTopics(new UdpConn(queue, packet.getSocketAddress(), socket)));
+            break;
+          case "shutdown":
+            done = true;
+            queue.put(new TaskShutdown());
+            break;
+          default:
+            logger.warn("Unknown task: " + type);
+            break;
+
         }
       }
     } catch (Exception e) {
       logger.error(Utils.stackTrace(e));
-      logger.warn("Skip UPD packet.");
+      logger.warn("Skip Upd packet.");
     } finally {
       if (socket != null) {
         socket.close();

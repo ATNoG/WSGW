@@ -1,6 +1,6 @@
 package pt.ua.it.atnog.wsgw.task;
 
-import pt.ua.it.atnog.wsgw.WsConn;
+import pt.ua.it.atnog.wsgw.Conn;
 
 /**
  * TaskTopics class.
@@ -10,17 +10,17 @@ import pt.ua.it.atnog.wsgw.WsConn;
  * @version 1.0
  */
 public class TaskTopics extends Task {
-  private final WsConn wsconn;
+  private final Conn conn;
 
   /**
    * TaskTopics constructor.
    * Constructs a TaskTopics for a specific entity.
    *
-   * @param wsconn web-socket connection of the entity.
+   * @param conn web-socket connection of the entity.
    */
-  public TaskTopics(WsConn wsconn) {
+  public TaskTopics(Conn conn) {
     super("topics");
-    this.wsconn = wsconn;
+    this.conn = conn;
   }
 
   /**
@@ -28,7 +28,7 @@ public class TaskTopics extends Task {
    *
    * @return the web-socket connection of an entity.
    */
-  public WsConn wsconn() {
-    return wsconn;
+  public Conn conn() {
+    return conn;
   }
 }

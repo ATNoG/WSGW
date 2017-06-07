@@ -52,7 +52,7 @@ public class Gateway {
       udpEndpoint.join();
       pubSubManager.join();
       wsEndpoint.join();
-      logger.info("Graceful shutdown.");
+      logger.info("Gateway graceful shutdown.");
     }));
 
     pubSubManager.start();

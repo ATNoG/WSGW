@@ -52,7 +52,7 @@ public class Dispatcher implements Runnable {
    * Starts the dispatcher thread.
    */
   public void start() {
-    logger.trace("Start.");
+    logger.info("Dispatcher running.");
     thread.start();
   }
 
@@ -62,9 +62,8 @@ public class Dispatcher implements Runnable {
    */
   public void join() {
     try {
-      logger.trace("Join.");
-      queue.put(new TaskShutdown());
       thread.join();
+      logger.info("Dispatcher joined.");
     } catch (InterruptedException e) {
       logger.error(Utils.stackTrace(e));
     }
@@ -89,7 +88,7 @@ public class Dispatcher implements Runnable {
           break;
         }
         case "sub":
-          storage.put(((TaskSub) task).topic(), ((TaskSub) task).wsconn());
+          storage.put(((TaskSub) task).topic(), ((TaskSub) task).conn());
           break;
         case "unsub":
           storage.remove(((TaskUnsub) task).topic(), ((TaskUnsub) task).wsconn());
@@ -105,7 +104,7 @@ public class Dispatcher implements Runnable {
           }
           JSONObject json = new JSONObject();
           json.put("topics", array);
-          taskt.wsconn().sendString(json.toString());
+          taskt.conn().sendString(json.toString());
           break;
         }
         case "shutdown": {
