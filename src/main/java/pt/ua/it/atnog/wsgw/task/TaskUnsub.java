@@ -40,7 +40,7 @@ public class TaskUnsub extends Task {
    *
    * @return the web-socket connection of an entity.
    */
-  public Conn wsconn() {
+  public Conn conn() {
     return conn;
   }
 }

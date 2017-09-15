@@ -91,10 +91,10 @@ public class Dispatcher implements Runnable {
           storage.put(((TaskSub) task).topic(), ((TaskSub) task).conn());
           break;
         case "unsub":
-          storage.remove(((TaskUnsub) task).topic(), ((TaskUnsub) task).wsconn());
+          storage.remove(((TaskUnsub) task).topic(), ((TaskUnsub) task).conn());
           break;
         case "unsuball":
-          storage.remove(((TaskUnsuball) task).wsconn());
+          storage.remove(((TaskUnsuball) task).conn());
           break;
         case "topics": {
           TaskTopics taskt = (TaskTopics) task;

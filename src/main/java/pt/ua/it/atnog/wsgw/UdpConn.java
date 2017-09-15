@@ -29,9 +29,12 @@ public class UdpConn implements Conn, AutoCloseable {
   private final BlockingQueue<Task> queue;
 
   /**
-   * @param queue
-   * @param address
-   * @param socket
+   * UdpConn constructor.
+   * Constructs a udp connection with a specific {@link BlockingQueue}.
+   *
+   * @param queue {@link BlockingQueue} used to receive tasks.
+   * @param address {@link SocketAddress} address and port of the entity.
+   * @param socket {@link DatagramSocket} server socket used for communication.
    */
   public UdpConn(final BlockingQueue<Task> queue, final SocketAddress address,
                  final DatagramSocket socket) {
