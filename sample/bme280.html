@@ -18,6 +18,8 @@
                 tickPixelInterval: 150
             },
             yAxis: [{
+                min: 0,
+                max: 50,
                 labels: {
                     format: '{value}°C',
                     style: {
@@ -31,7 +33,10 @@
                     }
                 }
                 },
-                { labels: {
+                {
+                min: 0,
+                max: 100,
+                labels: {
                 format: '{value}%',
                 style: {
                     color: Highcharts.getOptions().colors[0]
@@ -45,7 +50,10 @@
                 },
                 opposite: true
             },
-            { labels: {
+            {
+            min:1000,
+            max:1100,
+            labels: {
                 format: '{value}hPa',
                 style: {
                     color: Highcharts.getOptions().colors[2]

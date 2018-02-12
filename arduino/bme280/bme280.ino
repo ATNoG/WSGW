@@ -11,6 +11,9 @@
 
 #define SEALEVELPRESSURE_HPA (1013.25)
 
+//const char* ssid     = "IoT-Privacy";
+//const char* password = "deadpool";
+
 const char* ssid     = "TP-LINK_1262";
 const char* password = "24398022";
 
@@ -23,7 +26,7 @@ unsigned long delayTime;
 // UDP Client
 WiFiUDP Udp;
 unsigned int localUdpPort = 4210;
-const char* ip = "192.168.0.101";
+const char* ip = "192.168.0.100";
 int port = 8888;
 
 String pret = "{\"type\":\"pub\",\"topic\":\"temperature\",\"value\":";
@@ -44,7 +47,7 @@ void setup() {
   }
     
   Serial.println("-- Default Test --");
-  delayTime = 2000;
+  delayTime = 1000;
 
   Serial.println();
 
