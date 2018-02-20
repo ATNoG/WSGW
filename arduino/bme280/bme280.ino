@@ -26,7 +26,7 @@ unsigned long delayTime;
 // UDP Client
 WiFiUDP Udp;
 unsigned int localUdpPort = 4210;
-const char* ip = "192.168.0.100";
+const char* ip = "192.168.0.101";
 int port = 8888;
 
 String pret = "{\"type\":\"pub\",\"topic\":\"temperature\",\"value\":";
@@ -69,15 +69,6 @@ void setup() {
   Udp.begin(localUdpPort); 
 }
 
-void loop() { 
-  float t = bme.readTemperature();
-  float h = bme.readHumidity();
-  float p = bme.readPressure() / 100.0F;
-  
-  sendValues(t,h,p, ip, port);
-  delay(delayTime);
-}
-
 void sendValues(float t, float h, float p, const char* ip, int port) {
   String temp = pret+t+"}";
   String humd = preh+h+"}";
@@ -99,4 +90,13 @@ void sendValues(float t, float h, float p, const char* ip, int port) {
   Udp.beginPacket(ip, port);
   Udp.write(pres.c_str());
   Udp.endPacket();
+}
+
+void loop() { 
+  float t = bme.readTemperature();
+  float h = bme.readHumidity();
+  float p = bme.readPressure() / 100.0F;
+  
+  sendValues(t,h,p, ip, port);
+  delay(delayTime);
 }

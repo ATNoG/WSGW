@@ -40,6 +40,7 @@ public class Dispatcher implements Runnable {
    * Constructs an dispatcher with a specific blocking queue.
    *
    * @param queue {@link BlockingQueue} used to receive tasks.
+   * @param qSize maximum number of values in the {@link Storage}
    */
   public Dispatcher(final BlockingQueue<Task> queue, final int qSize) {
     this.queue = queue;
