@@ -2,8 +2,6 @@
 <html lang="en">
 <head>
     <script src="https://code.highcharts.com/highcharts.js"></script>
-    <meta charset="UTF-8">
-    <title>BME 280</title>
     <script type="text/javascript">
         function setupHighcharts() {
             var chart = Highcharts.chart('container', {
@@ -11,15 +9,13 @@
                 type: 'spline'
             },
             title: {
-                text: 'Temperature, Humidity & Pressure'
+                text: 'Temperature & Humidity'
             },
             xAxis: {
                 type: 'datetime',
                 tickPixelInterval: 150
             },
             yAxis: [{
-                min: 0,
-                max: 50,
                 labels: {
                     format: '{value}°C',
                     style: {
@@ -33,10 +29,7 @@
                     }
                 }
                 },
-                {
-                min: 0,
-                max: 100,
-                labels: {
+                { labels: {
                 format: '{value}%',
                 style: {
                     color: Highcharts.getOptions().colors[0]
@@ -46,23 +39,6 @@
                     text: 'Humidity',
                     style: {
                         color: Highcharts.getOptions().colors[0]
-                    }
-                },
-                opposite: true
-            },
-            {
-            min:1000,
-            max:1100,
-            labels: {
-                format: '{value}hPa',
-                style: {
-                    color: Highcharts.getOptions().colors[2]
-                }
-                },
-                title: {
-                    text: 'Pressure',
-                    style: {
-                        color: Highcharts.getOptions().colors[2]
                     }
                 },
                 opposite: true
@@ -81,7 +57,7 @@
                 var data = [],time = (new Date()).getTime(), i;
 
                 for (i = 0; i < 10; i += 1) {
-                    data.push({x: (time - ((10-i) * 1000)),y: 15});
+                    data.push({x: (time - ((10-i) * 1000)),y: 15+i});
                 }
 
                 return data;
@@ -95,21 +71,9 @@
                 var data = [],time = (new Date()).getTime(), i;
 
                 for (i = 0; i < 10; i += 1) {
-                    data.push({x: (time - ((10-i) * 1000)),y: 50});
+                    data.push({x: (time - ((10-i) * 1000)),y: 0});
                 }
 
-                return data;
-                }())
-                },
-                {name: 'pressure',
-                type: 'spline',
-                yAxis: 2,
-                color: Highcharts.getOptions().colors[2],
-                data: (function () {
-                var data = [],time = (new Date()).getTime(), i;
-                for (i = 0; i < 10; i += 1) {
-                    data.push({x: (time - ((10-i) * 1000)),y: 1000});
-                }
                 return data;
                 }())
                 }
@@ -125,7 +89,6 @@
                 console.log("Subscribe topic temperature.")
                 ws.send("{\"type\":\"sub\",\"topic\":\"temperature\"}");
                 ws.send("{\"type\":\"sub\",\"topic\":\"humidity\"}");
-                ws.send("{\"type\":\"sub\",\"topic\":\"pressure\"}")
             };
 
             ws.onmessage = function (evt)
@@ -133,19 +96,12 @@
                 var received_msg = evt.data;
                 console.log(received_msg);
                 var json = JSON.parse(received_msg);
-                switch(json.topic) {
-                    case "temperature":
-                        var x = (new Date()).getTime(), y = json.value;
-                        chart.series[0].addPoint([x, y], true, true);
-                        break;
-                    case "humidity":
-                        var x = (new Date()).getTime(), y = json.value;
-                        chart.series[1].addPoint([x, y], true, true);
-                        break;
-                    case "pressure":
-                        var x = (new Date()).getTime(), y = json.value;
-                        chart.series[2].addPoint([x, y], true, true);
-                        break;
+                if(json.topic == "temperature") {
+                    var x = (new Date()).getTime(), y = json.value;
+                    chart.series[0].addPoint([x, y], true, true);
+                } else {
+                    var x = (new Date()).getTime(), y = json.value;
+                    chart.series[1].addPoint([x, y], true, true);
                 }
             };
 
@@ -159,7 +115,10 @@
             setupWS(setupHighcharts());
         }
 
+
     </script>
+    <meta charset="UTF-8">
+    <title>Temperature & Humidity sample</title>
 </head>
 <body onload="setup();">
 <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
