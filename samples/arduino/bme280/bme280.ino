@@ -26,7 +26,7 @@ unsigned long delayTime;
 // UDP Client
 WiFiUDP Udp;
 unsigned int localUdpPort = 4210;
-const char* ip = "192.168.0.101";
+const char* ip = "192.168.0.102";
 int port = 8888;
 
 String pret = "{\"type\":\"pub\",\"topic\":\"temperature\",\"value\":";
