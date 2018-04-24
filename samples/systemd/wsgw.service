@@ -3,7 +3,7 @@ Description=wsgw
 After=network.target
 
 [Service]
-Type=forking
+Type=simple
 WorkingDirectory=/home/pi/git/wsgw
 ExecStart=/bin/sh -c "exec java -jar /home/pi/git/wsgw/target/wsgw-1.0.jar /home/pi/git/wsgw/wsgw.properties"
 
