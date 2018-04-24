@@ -1,0 +1,11 @@
+[Unit]
+Description=wsgw
+After=network.target
+
+[Service]
+Type=forking
+WorkingDirectory=/home/pi/git/wsgw
+ExecStart=java java -jar /home/pi/git/wsgw/target/wsgw-1.0.jar /home/pi/git/wsgw/wsgw.properties
+
+[Install]
+WantedBy=multi-user.target
