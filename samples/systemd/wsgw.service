@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/home/pi/git/wsgw
-ExecStart=/bin/sh -c "exec java -jar /home/pi/git/wsgw/target/wsgw-1.0.jar /home/pi/git/wsgw/wsgw.properties"
+ExecStart=/bin/sh -c "exec java -Djava.util.logging.config.file=/home/pi/git/wsgw/logging.properties -jar /home/pi/git/wsgw/target/wsgw-1.0.jar /home/pi/git/wsgw/wsgw.properties"
 
 [Install]
 WantedBy=multi-user.target
