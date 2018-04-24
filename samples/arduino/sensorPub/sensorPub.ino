@@ -15,8 +15,8 @@
 
 BH1750 lightMeter;
 
-const char* ssid     = "TP-LINK_1262";
-const char* password = "24398022";
+const char* ssid     = "demoIT";
+const char* password = "";
 
 Adafruit_BME280 bme;
 
@@ -25,8 +25,8 @@ unsigned long delayTime = 800;
 // UDP Client
 WiFiUDP udp;
 unsigned int localUdpPort = 4210;
-const char* ip = "192.168.0.102";
-int port = 8888;
+const char* ip = "192.168.1.1";
+unsigned int port = 8888;
 
 void setup() {
   Serial.begin(115200);

@@ -23,7 +23,7 @@ unsigned long delayTime = 800;
 WiFiUDP udp;
 unsigned int localUdpPort = 4210;
 const char* ip = "192.168.0.102";
-int port = 8888;
+unsigned int port = 8888;
 
 void setup() {
   Serial.begin(115200);
