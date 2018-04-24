@@ -8,20 +8,14 @@ const char* password = "24398022";
 unsigned long delayTime = 10;
 unsigned int ledPin = 13;
 unsigned int humidity = 85;
+unsigned int ledPinLux = 12;
 
 // UDP Client
-WiFiUDP Udp;
+WiFiUDP udp;
 unsigned int localUdpPort = 4210;
 const char* ip = "192.168.0.102";
-//const char* ip = "192.168.1.249";
 int port = 8888;
 char incomingPacket[255];
-
-void sendUDP(const char* msg, const char* ip, int port) {
-  Udp.beginPacket(ip, port);
-  Udp.write(msg);
-  Udp.endPacket();
-}
 
 void setup() {
   Serial.begin(115200);
@@ -50,62 +44,64 @@ void setup() {
   Serial.println(WiFi.localIP());
 
   // Start UDP Socket
-  Udp.begin(localUdpPort);
+  udp.begin(localUdpPort);
 
   // JSON Encoder
   const size_t bufferSize = JSON_OBJECT_SIZE(2);
   DynamicJsonBuffer jsonBuffer(bufferSize);
-  
+
+  // Subscribe Humidity
   JsonObject& root = jsonBuffer.createObject();
   root["type"] = "sub";
   root["topic"] = "humidity";
 
-  char jsonMsg[100];
-  root.printTo((char*)jsonMsg, root.measureLength() + 1);
+  udp.beginPacket(ip, port);
+  root.printTo(udp);
+  udp.println();
+  udp.endPacket();
 
-  // Subscrive to temperature
-  sendUDP(jsonMsg, ip, port);
+  // Subscribe Light
+  root["topic"] = "light";
+
+  udp.beginPacket(ip, port);
+  root.printTo(udp);
+  udp.println();
+  udp.endPacket();
 }
-
 
 void loop() {
   // Receive UDP Package
-  int packetSize = Udp.parsePacket();
+  int packetSize = udp.parsePacket();
+  
   if (packetSize)
   {
     // receive incoming UDP packets
-    Serial.printf("Received %d bytes from %s, port %d\n", packetSize, Udp.remoteIP().toString().c_str(), Udp.remotePort());
-    int len = Udp.read(incomingPacket, 255);
+    /*Serial.printf("Received %d bytes from %s, port %d\n", packetSize, udp.remoteIP().toString().c_str(), udp.remotePort());
+    int len = udp.read(incomingPacket, 255);
     if (len > 0)
     {
       incomingPacket[len] = 0;
     }
-    Serial.printf("UDP packet contents: %s\n", incomingPacket);
-
-    // send back a reply, to the IP address and port we got the packet from
-    //Udp.beginPacket(Udp.remoteIP(), Udp.remotePort());
-    //Udp.write(replyPacket);
-    //Udp.endPacket();
-    
+    Serial.printf("UDP packet contents: %s\n", incomingPacket);*/
+ 
     // JSON Parser
     const size_t bufferSize = JSON_OBJECT_SIZE(3) + 40;
     DynamicJsonBuffer jsonBuffer(bufferSize);
-    JsonObject& root = jsonBuffer.parseObject(incomingPacket);
-    const char* type = root["type"]; // "pub"
-    const char* topic = root["topic"]; // "temperature"
+    JsonObject& root = jsonBuffer.parseObject(udp);
+    const char* type = root["type"]; 
+    const char* topic = root["topic"];
     int value = root["value"];
 
-    if(value > humidity) {
-      digitalWrite(ledPin, HIGH);
+    if(strcmp(topic,"humidity") == 0) {
+      if(value > humidity) {
+        digitalWrite(ledPin, HIGH);
+      } else {
+        digitalWrite(ledPin, LOW);
+      }
     } else {
-      digitalWrite(ledPin, LOW);
+      int i = 0.098*value;
+      analogWrite(ledPinLux, i);
     }
   }
-
-  uint16_t lux = lightMeter.readLightLevel();
-  Serial.print("Light: ");
-  Serial.print(lux);
-  Serial.println(" lx");
-  
   delay(delayTime);
 }

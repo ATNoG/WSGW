@@ -4,6 +4,7 @@
 #include <ArduinoJson.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
+#include <BH1750.h>
 
 #define BME_SCK 13
 #define BME_MISO 12
@@ -11,6 +12,8 @@
 #define BME_CS 10
 
 #define SEALEVELPRESSURE_HPA 1013.25
+
+BH1750 lightMeter;
 
 const char* ssid     = "TP-LINK_1262";
 const char* password = "24398022";
@@ -28,8 +31,8 @@ int port = 8888;
 void setup() {
   Serial.begin(115200);
   delay(100);
-
-  // BME 280
+  
+  // BME280
   bool status = bme.begin();
   if (!status) {
       Serial.println("Could not find a valid BME280 sensor, check wiring!");
@@ -38,7 +41,14 @@ void setup() {
   Serial.println("BME280 Test");
   Serial.println();
   delay(100);
-  
+
+  // BH1750
+  //Wire.begin(D5,D6);
+  lightMeter.begin();
+  Serial.println("BH1750 Test");
+  Serial.println();
+  delay(100);
+
   // WiFi Connect
   WiFi.begin(ssid, password);
   Serial.print("\n\r \n\rWorking to connect");
@@ -56,10 +66,10 @@ void setup() {
   Serial.println(WiFi.localIP());
 
   // Start UDP Connection
-  udp.begin(localUdpPort);
+  udp.begin(localUdpPort); 
 }
 
-void loop() { 
+void loop() {
   // JSON Buffer
   StaticJsonBuffer<100> jsonBuffer;
 
@@ -75,6 +85,12 @@ void loop() {
   Serial.print("% Pressure: ");
   Serial.print(p);
   Serial.println("hpa");
+
+  // Read BH1750 
+  unsigned int l = lightMeter.readLightLevel();
+  Serial.print("Light: ");
+  Serial.print(l);
+  Serial.println("lx");
 
   // Publish UDP Packets
   // Temperature
@@ -100,6 +116,15 @@ void loop() {
   // Pressure
   root["topic"] = "pressure";
   root["value"] = p; 
+  
+  udp.beginPacket(ip, port);
+  root.printTo(udp);
+  udp.println();
+  udp.endPacket();
+
+  // Light
+  root["topic"] = "light";
+  root["value"] = l; 
   
   udp.beginPacket(ip, port);
   root.printTo(udp);
