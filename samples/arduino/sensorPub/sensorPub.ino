@@ -87,7 +87,8 @@ void loop() {
   Serial.print("hpa");
 
   // Read BH1750 
-  unsigned int l = floor(lightMeter.readLightLevel()/65535.0*100.0);
+  unsigned int l = lightMeter.readLightLevel();
+  l = floor(((l - 1.0)/(54612.0 - 1.0))*100.0);
   Serial.print(" Light: ");
   Serial.print(l);
   Serial.println("%");

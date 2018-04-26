@@ -6,9 +6,9 @@ const char* ssid     = "demoIT";
 const char* password = "";
 
 unsigned long delayTime = 10;
-unsigned int ledPin = 13;
-unsigned int humidity = 85;
+unsigned int ledPinHum = 13;
 unsigned int ledPinLux = 12;
+unsigned int humidity = 85;
 
 // UDP Client
 WiFiUDP udp;
@@ -21,9 +21,11 @@ void setup() {
   Serial.begin(115200);
   delay(10);
 
-  // LED Starts OFF
-  pinMode(ledPin, OUTPUT);
-  digitalWrite(ledPin, LOW);
+  // LEDs Starts OFF
+  pinMode(ledPinHum, OUTPUT);
+  digitalWrite(ledPinHum, LOW);
+  pinMode(ledPinLux, OUTPUT);
+  digitalWrite(ledPinLux, LOW);
   
   // Connect to WiFi
   Serial.println();
@@ -91,9 +93,9 @@ void loop() {
 
     if(strcmp(topic,"humidity") == 0) {
       if(value > humidity) {
-        digitalWrite(ledPin, HIGH);
+        digitalWrite(ledPinHum, HIGH);
       } else {
-        digitalWrite(ledPin, LOW);
+        digitalWrite(ledPinHum, LOW);
       }
     } else {
       analogWrite(ledPinLux, floor(value*10.23));
