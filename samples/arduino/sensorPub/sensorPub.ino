@@ -84,13 +84,13 @@ void loop() {
   Serial.print(h);
   Serial.print("% Pressure: ");
   Serial.print(p);
-  Serial.println("hpa");
+  Serial.print("hpa");
 
   // Read BH1750 
-  unsigned int l = lightMeter.readLightLevel();
-  Serial.print("Light: ");
+  unsigned int l = floor(lightMeter.readLightLevel()/65535.0*100.0);
+  Serial.print(" Light: ");
   Serial.print(l);
-  Serial.println("lx");
+  Serial.println("%");
 
   // Publish UDP Packets
   // Temperature

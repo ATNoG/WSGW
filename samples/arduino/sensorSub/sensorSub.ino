@@ -2,8 +2,8 @@
 #include <WiFiUdp.h>
 #include <ArduinoJson.h>
 
-const char* ssid     = "TP-LINK_1262";
-const char* password = "24398022";
+const char* ssid     = "demoIT";
+const char* password = "";
 
 unsigned long delayTime = 10;
 unsigned int ledPin = 13;
@@ -13,9 +13,9 @@ unsigned int ledPinLux = 12;
 // UDP Client
 WiFiUDP udp;
 unsigned int localUdpPort = 4210;
-const char* ip = "192.168.0.102";
+const char* ip = "192.168.1.1";
 int port = 8888;
-char incomingPacket[255];
+char packetBuffer[UDP_TX_PACKET_MAX_SIZE];
 
 void setup() {
   Serial.begin(115200);
@@ -75,22 +75,19 @@ void loop() {
   
   if (packetSize)
   {
-    // receive incoming UDP packets
-    /*Serial.printf("Received %d bytes from %s, port %d\n", packetSize, udp.remoteIP().toString().c_str(), udp.remotePort());
-    int len = udp.read(incomingPacket, 255);
-    if (len > 0)
-    {
-      incomingPacket[len] = 0;
-    }
-    Serial.printf("UDP packet contents: %s\n", incomingPacket);*/
- 
+    // Read UDP Package
+    udp.read(packetBuffer, UDP_TX_PACKET_MAX_SIZE);
+    
     // JSON Parser
     const size_t bufferSize = JSON_OBJECT_SIZE(3) + 40;
     DynamicJsonBuffer jsonBuffer(bufferSize);
-    JsonObject& root = jsonBuffer.parseObject(udp);
+    JsonObject& root = jsonBuffer.parseObject(packetBuffer);
     const char* type = root["type"]; 
     const char* topic = root["topic"];
     int value = root["value"];
+
+    root.printTo(Serial);
+    Serial.println();
 
     if(strcmp(topic,"humidity") == 0) {
       if(value > humidity) {
@@ -99,8 +96,7 @@ void loop() {
         digitalWrite(ledPin, LOW);
       }
     } else {
-      int i = 0.098*value;
-      analogWrite(ledPinLux, i);
+      analogWrite(ledPinLux, floor(value*10.23));
     }
   }
   delay(delayTime);
