@@ -59,7 +59,9 @@ public class UdpEndpoint implements Runnable {
 
   /**
    * Joins the UdpEndpoint thread.
+   * <p>
    * Implements a graceful shutdown.
+   * </p>
    */
   public void join() {
     try {

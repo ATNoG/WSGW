@@ -1,3 +1,4 @@
+#include <NTPClient.h>
 #include <Wire.h>
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
@@ -20,13 +21,17 @@ const char* password = "";
 
 Adafruit_BME280 bme;
 
-unsigned long delayTime = 800;
+unsigned long delayTime = 1000;
 
 // UDP Client
 WiFiUDP udp;
 unsigned int localUdpPort = 4210;
-const char* ip = "192.168.1.1";
+const char* ip = "192.168.1.9";
 unsigned int port = 8888;
+
+// Wifi NTP UDP
+WiFiUDP ntpUDP;
+NTPClient timeClient(ntpUDP, "ntp.ua.pt");
 
 void setup() {
   Serial.begin(115200);
@@ -66,12 +71,19 @@ void setup() {
   Serial.println(WiFi.localIP());
 
   // Start UDP Connection
-  udp.begin(localUdpPort); 
+  udp.begin(localUdpPort);
+
+  // Start NTP Client
+  timeClient.begin();
 }
 
 void loop() {
   // JSON Buffer
   StaticJsonBuffer<100> jsonBuffer;
+
+  // Update NTP client
+  timeClient.update();
+  unsigned long ts = timeClient.getEpochTime();
 
   // Read BME280 values
   float t = bme.readTemperature();
@@ -91,14 +103,19 @@ void loop() {
   l = floor(((l - 1.0)/(54612.0 - 1.0))*100.0);
   Serial.print(" Light: ");
   Serial.print(l);
-  Serial.println("%");
+  Serial.print("%");
+  Serial.print(" TS: ");
+  Serial.print(ts);
+  Serial.print("ms -> ");
+  Serial.println(timeClient.getFormattedTime());
 
   // Publish UDP Packets
   // Temperature
   JsonObject& root = jsonBuffer.createObject();
   root["type"] = "pub";
   root["topic"] = "temperature";
-  root["value"] = t; 
+  root["value"] = t;
+  root["ts"] = ts;
   
   udp.beginPacket(ip, port);
   root.printTo(udp);

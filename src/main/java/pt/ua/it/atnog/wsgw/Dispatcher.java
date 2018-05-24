@@ -13,6 +13,7 @@ import pt.ua.it.atnog.wsgw.task.TaskTopics;
 import pt.ua.it.atnog.wsgw.task.TaskUnsub;
 import pt.ua.it.atnog.wsgw.task.TaskUnsuball;
 
+import java.time.Instant;
 import java.util.concurrent.BlockingQueue;
 
 /**
@@ -85,6 +86,9 @@ public class Dispatcher implements Runnable {
       switch (task.type()) {
         case "pub": {
           TaskPub taskp = (TaskPub) task;
+          if (!taskp.data().contains("ts")) {
+            taskp.data().put("ts", Instant.now().toEpochMilli() / 1000);
+          }
           storage.put(taskp.data().get("topic").asString(), taskp.data());
           break;
         }
