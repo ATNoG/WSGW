@@ -109,7 +109,7 @@ public class Dispatcher implements Runnable {
           }
           JSONObject json = new JSONObject();
           json.put("topics", array);
-          taskt.conn().sendString(json.toString());
+          taskt.conn().sendJSON(json);
           break;
         }
         case "shutdown": {

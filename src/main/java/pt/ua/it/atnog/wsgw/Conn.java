@@ -1,5 +1,7 @@
 package pt.ua.it.atnog.wsgw;
 
+import pt.it.av.atnog.utils.json.JSONObject;
+
 /**
  * Conn interface.
  * <p>
@@ -17,4 +19,13 @@ public interface Conn {
    * @param txt {@link String} message.
    */
   void sendString(String txt);
+
+  /**
+   * Sends a {@link JSONObject} message to the entity.
+   *
+   * @param json {@link JSONObject} message.
+   */
+  default void sendJSON(JSONObject json) {
+    sendString(json.toString());
+  }
 }

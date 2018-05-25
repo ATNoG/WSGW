@@ -53,7 +53,7 @@ public class Storage extends HashMap<String, Pair<List<Conn>, Queue<JSONObject>>
     if (containsKey(topic)) {
       item = get(topic);
       for (Conn c : item.a) {
-        c.sendString(data.toString());
+        c.sendJSON(data);
       }
     } else {
       item = new Pair<>(new ArrayList<>(), new CircularPriorityQueue<>(qSize, c));
@@ -73,7 +73,7 @@ public class Storage extends HashMap<String, Pair<List<Conn>, Queue<JSONObject>>
     if (containsKey(topic)) {
       item = get(topic);
       for (JSONObject datum : item.b) {
-        conn.sendString(datum.toString());
+        conn.sendJSON(datum);
       }
     } else {
       item = new Pair<>(new ArrayList<>(), new CircularPriorityQueue<>(qSize, c));
