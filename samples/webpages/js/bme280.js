@@ -112,7 +112,7 @@ function setupWS(chart, ws) {
   var ws = new WebSocket(ws);
   ws.onopen = function()
   {
-    console.log("Subscribe topic temperature.");
+    console.log("Subscribe topics: temperature, humidity and pressure.");
     ws.send("{\"type\":\"sub\",\"topic\":\"temperature\"}");
     ws.send("{\"type\":\"sub\",\"topic\":\"humidity\"}");
     ws.send("{\"type\":\"sub\",\"topic\":\"pressure\"}");
@@ -126,16 +126,13 @@ function setupWS(chart, ws) {
     var ts = json.ts*1000;
     switch(json.topic) {
       case "temperature":
-        var x = ts, y = json.value;
-        chart.series[0].addPoint([x, y], true, true);
+        chart.series[0].addPoint([ts, json.value], true, true);
         break;
       case "humidity":
-        var x = ts, y = json.value;
-        chart.series[1].addPoint([x, y], true, true);
+        chart.series[1].addPoint([ts, json.value], true, true);
         break;
       case "pressure":
-        var x = ts, y = json.value;
-        chart.series[2].addPoint([x, y], true, true);
+        chart.series[2].addPoint([ts, json.value], true, true);
         break;
     }
   };

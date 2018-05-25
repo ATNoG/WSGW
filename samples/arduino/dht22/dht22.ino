@@ -4,8 +4,8 @@
 #include <ArduinoJson.h>
 #include "DHT.h"
 
-const char* ssid     = "TP-LINK_1262";
-const char* password = "24398022";
+const char* ssid     = "demoIT";
+const char* password = "";
 
 // DHT22
 #define DHTTYPE DHT22
@@ -17,7 +17,7 @@ unsigned long delayTime = 800;
 // UDP Client
 WiFiUDP udp;
 unsigned int localUdpPort = 4210;
-const char* ip = "192.168.0.102";
+const char* ip = "192.168.1.1";
 unsigned int port = 8888;
 
 void setup() {

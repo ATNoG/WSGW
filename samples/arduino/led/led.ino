@@ -2,8 +2,8 @@
 #include <WiFiUdp.h>
 #include <ArduinoJson.h>
 
-const char* ssid     = "TP-LINK_1262";
-const char* password = "24398022";
+const char* ssid     = "demoIT";
+const char* password = "";
 
 unsigned long delayTime = 10;
 unsigned int ledPin = 13;
@@ -12,10 +12,9 @@ unsigned int humidity = 85;
 // UDP Client
 WiFiUDP Udp;
 unsigned int localUdpPort = 4210;
-const char* ip = "192.168.0.102";
-//const char* ip = "192.168.1.249";
+const char* ip = "192.168.1.1";
 int port = 8888;
-char incomingPacket[255];
+char packetBuffer[UDP_TX_PACKET_MAX_SIZE];
 
 void sendUDP(const char* msg, const char* ip, int port) {
   Udp.beginPacket(ip, port);
