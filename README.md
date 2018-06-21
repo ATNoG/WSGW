@@ -6,14 +6,14 @@ Rather simple pub/sub gateway that bridges UDP and WebSockets (WS).
 Producers share data through a UDP/WS connection, it only supports JSON data.
 Clients request data through a ws/upd connection.
 
-It has been used to show case small IoT scenarios in school demonstrations.
+It has been used to showcase small IoT scenarios in school demonstrations.
 
 ## Prerequisites
 
 Most of my code requires a library named [utils](https://github.com/mariolpantunes/utils).
 This library is no exception, it also requires Jetty libraries (from WS support).
 Currently, it requires Java 8.
-In the future the code will be converted to Java 10 and the Jetty requirement may/will be dropped.
+In the future, the code will be converted to Java 10 and the Jetty requirement may/will be dropped.
 
 ## Installation
 
@@ -34,7 +34,7 @@ java -jar target/wsgw-1.0.jar wsgw.properties
 ## Samples and Examples
 
 We provide some samples and examples.
-Several arduino sketch, webpages and a systemd service can be found [here](samples).
+Several Arduino sketches, web pages and a systemd service can be found [here](samples).
 
 ## Authors
 

@@ -20,13 +20,13 @@ For more information about these samples, click [here](arduino).
 
 ## SystemD
 
-A simple unit configuration file to start the WSGW in linux systems.
+A simple unit configuration file to start the WSGW in Linux systems.
 
 For more information about these samples, click [here](systemd).
 
 ## WebPages
 
-Some webpages that connect to the WSGW through websockets and subscribe data from specific sensors.
+Some web pages that connect to the WSGW through WebSockets and subscribe data from specific sensors.
 
 For more information about these samples, click [here](webpages).
 
