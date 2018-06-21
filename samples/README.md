@@ -14,15 +14,21 @@ The list of peripherals/sensors used is the following:
 * DHT22 (Temperature and Humidity)
 * BME280 (Temperature, Humidity and Atmospheric Pressure)
 * BH1750 (Light)
-* SSD1306 (OLED 128x64 disply)
+* SSD1306 (OLED 128x64 display)
 
-For more information about these samples, click [here](arduino/README.md)
+For more information about these samples, click [here](arduino/README.md).
 
 ## SystemD
 
+A simple unit configuration file to start the WSGW in linux systems.
+
+For more information about these samples, click [here](systemd/README.md).
 
 ## WebPages
 
+Some webpages that connect to the WSGW through websockets and subscribe data from specific sensors.
+
+For more information about these samples, click [here](webpages/README.md).
 
 ## Authors
 

@@ -33,9 +33,9 @@ java -jar target/wsgw-1.0.jar wsgw.properties
 
 ## Samples and Examples
 
-We provide examples of two webpages that subscribe data from sensors (DTH22 and BME280),
-and the ESP8266 (arduino sketch) code to publish the data.
-The code can be found in samples folder: arduino and webpages respectively.
+We provide some samples and examples.
+Several arduino sketch, webpages and a systemd service can be found [here](samples).
+For more information about the samples, please click [here](samples/README.md)
 
 ## Authors
 
