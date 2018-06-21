@@ -1,19 +1,22 @@
-# WebSocket Gateway (WSGW)
+# Samples
 
-WebSocket (WS) Gateway.
+Several examples and samples.
 
-Rather simple pub/sub gateway that bridges UDP and WebSockets (WS).
-Producers share data through a UDP/WS connection, it only supports JSON data.
-Clients request data through a ws/upd connection.
+The WSGW was developed to be a simple gateway with WebSocket capability,
+easy to use, low memory footprint, and more important ease the development of demos inside the department.
+As such, the samples here serve as a repository for simple IoT demos.
 
-It has been used to show case small IoT scenarios in school demonstrations.
+## Arduino
 
-## Prerequisites
+We have some examples using two IoT boards NodeMCU ESP-12E (ESP8622) and NodeMCU 32s (ESP32).
+The list of peripherals/sensors used is the following:
+* Simple LEDs
+* DHT22 (Temperature and Humidity)
+* BME280 (Temperature, Humidity and Atmospheric Pressure)
+* BH1750 (Light)
+* SSD1306 (OLED 128x64 disply)
 
-Most of my code requires a library named [utils](https://github.com/mariolpantunes/utils).
-This library is no exception, it also requires Jetty libraries (from WS support).
-Currently, it requires Java 8.
-In the future the code will be converted to Java 10 and the Jetty requirement may/will be dropped.
+For more information about these samples, click [here](arduino/)
 
 ## Installation
 
