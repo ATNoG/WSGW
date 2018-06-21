@@ -35,7 +35,6 @@ java -jar target/wsgw-1.0.jar wsgw.properties
 
 We provide some samples and examples.
 Several arduino sketch, webpages and a systemd service can be found [here](samples).
-For more information about the samples, please click [here](samples/README.md)
 
 ## Authors
 
@@ -43,4 +42,4 @@ For more information about the samples, please click [here](samples/README.md)
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.

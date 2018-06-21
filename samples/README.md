@@ -16,19 +16,19 @@ The list of peripherals/sensors used is the following:
 * BH1750 (Light)
 * SSD1306 (OLED 128x64 display)
 
-For more information about these samples, click [here](arduino/README.md).
+For more information about these samples, click [here](arduino).
 
 ## SystemD
 
 A simple unit configuration file to start the WSGW in linux systems.
 
-For more information about these samples, click [here](systemd/README.md).
+For more information about these samples, click [here](systemd).
 
 ## WebPages
 
 Some webpages that connect to the WSGW through websockets and subscribe data from specific sensors.
 
-For more information about these samples, click [here](webpages/README.md).
+For more information about these samples, click [here](webpages).
 
 ## Authors
 
@@ -36,4 +36,4 @@ For more information about these samples, click [here](webpages/README.md).
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](../LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](../LICENSE.md) file for details.
