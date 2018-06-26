@@ -182,7 +182,7 @@ function setupWS(charts, ws) {
     ws.send("{\"type\":\"sub\",\"topic\":\"temperature\"}");
     ws.send("{\"type\":\"sub\",\"topic\":\"humidity\"}");
     ws.send("{\"type\":\"sub\",\"topic\":\"pressure\"}");
-    ws.send("{\"type\":\"sub\",\"topic\":\"light\"}")
+    ws.send("{\"type\":\"sub\",\"topic\":\"light\"}");
   };
 
   ws.onmessage = function (evt)

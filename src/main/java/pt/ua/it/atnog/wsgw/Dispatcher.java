@@ -5,6 +5,9 @@ import org.slf4j.LoggerFactory;
 import pt.it.av.atnog.utils.Utils;
 import pt.it.av.atnog.utils.json.JSONArray;
 import pt.it.av.atnog.utils.json.JSONObject;
+import pt.ua.it.atnog.wsgw.storage.NoStorage;
+import pt.ua.it.atnog.wsgw.storage.Storage;
+import pt.ua.it.atnog.wsgw.storage.Topics;
 import pt.ua.it.atnog.wsgw.task.Task;
 import pt.ua.it.atnog.wsgw.task.TaskPub;
 import pt.ua.it.atnog.wsgw.task.TaskShutdown;
@@ -32,7 +35,7 @@ public class Dispatcher implements Runnable {
   private final Logger logger = LoggerFactory.getLogger(Dispatcher.class);
   private final Thread thread;
   private final BlockingQueue<Task> queue;
-  private final Storage storage;
+  private final Topics topics;
   private boolean done;
 
 
@@ -45,7 +48,11 @@ public class Dispatcher implements Runnable {
    */
   public Dispatcher(final BlockingQueue<Task> queue, final int qSize) {
     this.queue = queue;
-    storage = new Storage(qSize);
+    if (qSize > 0) {
+      topics = new Storage(qSize);
+    } else {
+      topics = new NoStorage();
+    }
     thread = new Thread(this);
     done = false;
   }
@@ -77,7 +84,7 @@ public class Dispatcher implements Runnable {
       Task task;
       try {
         task = queue.take();
-        logger.trace(task.toString());
+        logger.debug(task.toString());
       } catch (InterruptedException e) {
         logger.error(Utils.stackTrace(e));
         task = new TaskShutdown();
@@ -89,22 +96,22 @@ public class Dispatcher implements Runnable {
           if (!taskp.data().contains("ts")) {
             taskp.data().put("ts", Instant.now().toEpochMilli() / 1000);
           }
-          storage.put(taskp.data().get("topic").asString(), taskp.data());
+          topics.notify(taskp.data().get("topic").asString(), taskp.data());
           break;
         }
         case "sub":
-          storage.put(((TaskSub) task).topic(), ((TaskSub) task).conn());
+          topics.register(((TaskSub) task).topic(), ((TaskSub) task).conn());
           break;
         case "unsub":
-          storage.remove(((TaskUnsub) task).topic(), ((TaskUnsub) task).conn());
+          topics.unsubscribe(((TaskUnsub) task).topic(), ((TaskUnsub) task).conn());
           break;
         case "unsuball":
-          storage.remove(((TaskUnsuball) task).conn());
+          topics.unsubscribe(((TaskUnsuball) task).conn());
           break;
         case "topics": {
           TaskTopics taskt = (TaskTopics) task;
           JSONArray array = new JSONArray();
-          for (String topic : storage.keys()) {
+          for (String topic : topics.keys()) {
             array.add(topic);
           }
           JSONObject json = new JSONObject();

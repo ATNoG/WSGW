@@ -1,10 +1,11 @@
-package pt.ua.it.atnog.wsgw;
+package pt.ua.it.atnog.wsgw.storage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pt.it.av.atnog.utils.json.JSONObject;
 import pt.it.av.atnog.utils.structures.queue.CircularPriorityQueue;
 import pt.it.av.atnog.utils.structures.tuple.Pair;
+import pt.ua.it.atnog.wsgw.Conn;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -25,7 +26,7 @@ import java.util.Queue;
  * @author <a href="mailto:mariolpantunes@gmail.com">Mário Antunes</a>
  * @version 1.0
  */
-public class Storage extends HashMap<String, Pair<List<Conn>, Queue<JSONObject>>> {
+public class Storage extends HashMap<String, Pair<List<Conn>, Queue<JSONObject>>> implements Topics {
   private final Logger logger = LoggerFactory.getLogger(Storage.class);
   private final int qSize;
   private final Comparator<JSONObject> c =
@@ -33,42 +34,35 @@ public class Storage extends HashMap<String, Pair<List<Conn>, Queue<JSONObject>>
 
   /**
    * Storage constructor.
+   * <p>
    * Constructs a {@link Storage} and limits the size of the {@link CircularPriorityQueue} to qSize.
+   * </p>
    *
    * @param qSize maximum number of values in the {@link CircularPriorityQueue}.
    */
   public Storage(final int qSize) {
+    super();
     this.qSize = qSize;
   }
 
-  /**
-   * Insert data related to a topic in the storage.
-   *
-   * @param topic {@link String} that represents a topic.
-   * @param data  {@link JSONObject} that contains the the data.
-   */
-  public void put(String topic, JSONObject data) {
-
+  @Override
+  public void notify(String topic, JSONObject data) {
     Pair<List<Conn>, Queue<JSONObject>> item;
     if (containsKey(topic)) {
       item = get(topic);
-      for (Conn c : item.a) {
-        c.sendJSON(data);
-      }
     } else {
       item = new Pair<>(new ArrayList<>(), new CircularPriorityQueue<>(qSize, c));
       put(topic, item);
     }
-    item.b.add(data);
+    if (item.b.add(data)) {
+      for (Conn c : item.a) {
+        c.sendJSON(data);
+      }
+    }
   }
 
-  /**
-   * Insert a new subscriber to the specific topic.
-   *
-   * @param topic {@link String} that represents a topic.
-   * @param conn  {@link Conn} that represents and web-socket connection.
-   */
-  public void put(String topic, Conn conn) {
+  @Override
+  public void register(String topic, Conn conn) {
     Pair<List<Conn>, Queue<JSONObject>> item;
     if (containsKey(topic)) {
       item = get(topic);
@@ -82,34 +76,21 @@ public class Storage extends HashMap<String, Pair<List<Conn>, Queue<JSONObject>>
     item.a.add(conn);
   }
 
-  /**
-   * Un-subscribes an entity from a specific topic.
-   *
-   * @param topic {@link String} that represents a topic.
-   * @param conn  {@link Conn} that represents and web-socket connection.
-   */
-  public void remove(String topic, Conn conn) {
+  @Override
+  public void unsubscribe(String topic, Conn conn) {
     if (containsKey(topic)) {
       get(topic).a.remove(conn);
     }
   }
 
-  /**
-   * Un-subscribes an entity from all topics.
-   *
-   * @param conn {@link Conn} that represents and web-socket connection.
-   */
-  public void remove(WsConn conn) {
+  @Override
+  public void unsubscribe(Conn conn) {
     for (Map.Entry<String, Pair<List<Conn>, Queue<JSONObject>>> entry : entrySet()) {
       entry.getValue().a.remove(conn);
     }
   }
 
-  /**
-   * List all available topics.
-   *
-   * @return {@link List} with all possible topics.
-   */
+  @Override
   public List<String> keys() {
     return new ArrayList<>(keySet());
   }

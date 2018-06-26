@@ -86,11 +86,11 @@ public class UdpEndpoint implements Runnable {
       byte[] data = new byte[1024];
       DatagramPacket packet = new DatagramPacket(data, data.length);
       while (!done) {
-        logger.trace("UDP endpoint receiving.");
+        logger.debug("UDP endpoint receiving.");
         socket.receive(packet);
         JSONObject json = JSONObject.read(new String(
             packet.getData(), packet.getOffset(), packet.getLength()));
-        logger.trace("UDP packet received: " + json.toString());
+        logger.debug("UDP packet received: " + json.toString());
         String type = json.get("type").asString();
         switch (type) {
           case "pub":
