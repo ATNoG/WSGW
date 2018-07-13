@@ -31,6 +31,11 @@ or (without the suggested logger configuration)
 java -jar target/wsgw-1.0.jar wsgw.properties 
 ```
 
+### System-D
+
+A simple unit configuration file to start the WSGW in Linux systems is provided [here](systemd).
+Update the paths in the file and add the unit to your system.
+
 ## Samples and Examples
 
 We provide some samples and examples.
