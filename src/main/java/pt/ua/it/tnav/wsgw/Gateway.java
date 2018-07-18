@@ -1,9 +1,9 @@
-package pt.ua.it.atnog.wsgw;
+package pt.ua.it.tnav.wsgw;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pt.ua.it.atnog.wsgw.logger.NullLogger;
-import pt.ua.it.atnog.wsgw.task.Task;
+import pt.ua.it.tnav.wsgw.logger.NullLogger;
+import pt.ua.it.tnav.wsgw.task.Task;
 
 import java.io.FileInputStream;
 import java.net.InetSocketAddress;

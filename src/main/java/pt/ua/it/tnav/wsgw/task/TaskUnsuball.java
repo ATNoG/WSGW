@@ -1,6 +1,6 @@
-package pt.ua.it.atnog.wsgw.task;
+package pt.ua.it.tnav.wsgw.task;
 
-import pt.ua.it.atnog.wsgw.Conn;
+import pt.ua.it.tnav.wsgw.Conn;
 
 /**
  * TaskUnsuball class.

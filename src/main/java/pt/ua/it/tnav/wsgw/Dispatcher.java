@@ -1,20 +1,20 @@
-package pt.ua.it.atnog.wsgw;
+package pt.ua.it.tnav.wsgw;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pt.it.av.atnog.utils.Utils;
-import pt.it.av.atnog.utils.json.JSONArray;
-import pt.it.av.atnog.utils.json.JSONObject;
-import pt.ua.it.atnog.wsgw.storage.NoStorage;
-import pt.ua.it.atnog.wsgw.storage.Storage;
-import pt.ua.it.atnog.wsgw.storage.Topics;
-import pt.ua.it.atnog.wsgw.task.Task;
-import pt.ua.it.atnog.wsgw.task.TaskPub;
-import pt.ua.it.atnog.wsgw.task.TaskShutdown;
-import pt.ua.it.atnog.wsgw.task.TaskSub;
-import pt.ua.it.atnog.wsgw.task.TaskTopics;
-import pt.ua.it.atnog.wsgw.task.TaskUnsub;
-import pt.ua.it.atnog.wsgw.task.TaskUnsuball;
+import pt.it.av.tnav.utils.Utils;
+import pt.it.av.tnav.utils.json.JSONArray;
+import pt.it.av.tnav.utils.json.JSONObject;
+import pt.ua.it.tnav.wsgw.storage.NoStorage;
+import pt.ua.it.tnav.wsgw.storage.Storage;
+import pt.ua.it.tnav.wsgw.storage.Topics;
+import pt.ua.it.tnav.wsgw.task.Task;
+import pt.ua.it.tnav.wsgw.task.TaskPub;
+import pt.ua.it.tnav.wsgw.task.TaskShutdown;
+import pt.ua.it.tnav.wsgw.task.TaskSub;
+import pt.ua.it.tnav.wsgw.task.TaskTopics;
+import pt.ua.it.tnav.wsgw.task.TaskUnsub;
+import pt.ua.it.tnav.wsgw.task.TaskUnsuball;
 
 import java.time.Instant;
 import java.util.concurrent.BlockingQueue;

@@ -1,12 +1,12 @@
-package pt.ua.it.atnog.wsgw;
+package pt.ua.it.tnav.wsgw;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pt.it.av.atnog.utils.Utils;
-import pt.ua.it.atnog.wsgw.task.Task;
+import pt.it.av.tnav.utils.Utils;
+import pt.ua.it.tnav.wsgw.task.Task;
 
 import java.util.concurrent.BlockingQueue;
 

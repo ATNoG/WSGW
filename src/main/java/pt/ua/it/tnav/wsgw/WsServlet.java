@@ -1,9 +1,9 @@
-package pt.ua.it.atnog.wsgw;
+package pt.ua.it.tnav.wsgw;
 
 import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
-import pt.ua.it.atnog.wsgw.task.Task;
+import pt.ua.it.tnav.wsgw.task.Task;
 
 import java.util.concurrent.BlockingQueue;
 

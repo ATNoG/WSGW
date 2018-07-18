@@ -1,6 +1,6 @@
-package pt.ua.it.atnog.wsgw.task;
+package pt.ua.it.tnav.wsgw.task;
 
-import pt.it.av.atnog.utils.json.JSONObject;
+import pt.it.av.tnav.utils.json.JSONObject;
 
 /**
  * TaskPub class.

@@ -1,4 +1,4 @@
-package pt.ua.it.atnog.wsgw.logger;
+package pt.ua.it.tnav.wsgw.logger;
 
 import org.eclipse.jetty.util.log.Logger;
 

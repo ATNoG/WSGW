@@ -1,9 +1,9 @@
-package pt.ua.it.atnog.wsgw.storage;
+package pt.ua.it.tnav.wsgw.storage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pt.it.av.atnog.utils.json.JSONObject;
-import pt.ua.it.atnog.wsgw.Conn;
+import pt.it.av.tnav.utils.json.JSONObject;
+import pt.ua.it.tnav.wsgw.Conn;
 
 import java.util.ArrayList;
 import java.util.HashMap;

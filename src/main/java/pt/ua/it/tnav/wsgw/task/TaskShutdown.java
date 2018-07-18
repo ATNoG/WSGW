@@ -1,4 +1,4 @@
-package pt.ua.it.atnog.wsgw.task;
+package pt.ua.it.tnav.wsgw.task;
 
 /**
  * TaskShutdown class.
