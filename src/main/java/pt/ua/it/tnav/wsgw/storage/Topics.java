@@ -52,4 +52,11 @@ public interface Topics {
    * @return {@link List} with all possible topics.
    */
   List<String> keys();
+
+  /**
+   * Returns an {@link JSONObject} document with the current state of the storage.
+   *
+   * @return {@link JSONObject} document with the current state of the storage.
+   */
+  JSONObject status();
 }

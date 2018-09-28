@@ -119,6 +119,10 @@ public class Dispatcher implements Runnable {
           taskt.conn().sendJSON(json);
           break;
         }
+        case "status": {
+
+          break;
+        }
         case "shutdown": {
           done = true;
           break;

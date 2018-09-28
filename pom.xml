@@ -3,7 +3,7 @@
   xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>pt.it.av.atnog</groupId>
+  <groupId>pt.it.av.tnav</groupId>
   <artifactId>wsgw</artifactId>
   <version>1.1</version>
 
@@ -42,7 +42,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.7.0</version>
+        <version>3.8.0</version>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
@@ -66,7 +66,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.1.0</version>
+        <version>3.2.0</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -92,22 +92,22 @@
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-server</artifactId>
-      <version>9.4.8.v20171121</version>
+      <version>9.4.12.v20180830</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-webapp</artifactId>
-      <version>9.4.8.v20171121</version>
+      <version>9.4.12.v20180830</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-servlets</artifactId>
-      <version>9.4.8.v20171121</version>
+      <version>9.4.12.v20180830</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-util</artifactId>
-      <version>9.4.8.v20171121</version>
+      <version>9.4.12.v20180830</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.jetty.websocket</groupId>
@@ -117,7 +117,7 @@
     <dependency>
       <groupId>org.eclipse.jetty.websocket</groupId>
       <artifactId>websocket-server</artifactId>
-      <version>9.4.8.v20171121</version>
+      <version>9.4.12.v20180830</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>

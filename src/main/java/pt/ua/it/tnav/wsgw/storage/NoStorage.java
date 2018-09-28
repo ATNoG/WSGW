@@ -2,6 +2,7 @@ package pt.ua.it.tnav.wsgw.storage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pt.it.av.tnav.utils.json.JSONArray;
 import pt.it.av.tnav.utils.json.JSONObject;
 import pt.ua.it.tnav.wsgw.Conn;
 
@@ -75,5 +76,25 @@ public class NoStorage extends HashMap<String, List<Conn>> implements Topics {
   @Override
   public List<String> keys() {
     return new ArrayList<>(keySet());
+  }
+
+  @Override
+  public JSONObject status() {
+    JSONObject json = new JSONObject();
+
+    List<String> topics = keys();
+
+    for(String t :topics) {
+      JSONArray conns = new JSONArray();
+      JSONObject topic = new JSONObject();
+      List<Conn> conn = get(t);
+      topic.put("topic", t);
+      for(Conn c : conn) {
+        conns.add(c.toString());
+      }
+      topic.put("connections", conns);
+    }
+
+    return json;
   }
 }

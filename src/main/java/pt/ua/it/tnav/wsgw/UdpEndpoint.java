@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import pt.it.av.tnav.utils.Utils;
 import pt.it.av.tnav.utils.json.JSONObject;
 import pt.ua.it.tnav.wsgw.task.Task;
+import pt.ua.it.tnav.wsgw.task.TaskFactory;
 import pt.ua.it.tnav.wsgw.task.TaskPub;
 import pt.ua.it.tnav.wsgw.task.TaskShutdown;
 import pt.ua.it.tnav.wsgw.task.TaskSub;
@@ -86,38 +87,12 @@ public class UdpEndpoint implements Runnable {
       byte[] data = new byte[1024];
       DatagramPacket packet = new DatagramPacket(data, data.length);
       while (!done) {
-        logger.debug("UDP endpoint receiving.");
         socket.receive(packet);
         JSONObject json = JSONObject.read(new String(
             packet.getData(), packet.getOffset(), packet.getLength()));
-        logger.debug("UDP packet received: " + json.toString());
-        String type = json.get("type").asString();
-        switch (type) {
-          case "pub":
-            queue.put(new TaskPub(json));
-            break;
-          case "sub":
-            queue.put(new TaskSub(json.get("topic").asString(),
-                new UdpConn(queue, packet.getSocketAddress(), socket)));
-            break;
-          case "unsub":
-            queue.put(new TaskUnsub(json.get("topic").asString(),
-                new UdpConn(queue, packet.getSocketAddress(), socket)));
-            break;
-          case "unsuball":
-            queue.put(new TaskUnsuball(new UdpConn(queue, packet.getSocketAddress(), socket)));
-            break;
-          case "topics":
-            queue.put(new TaskTopics(new UdpConn(queue, packet.getSocketAddress(), socket)));
-            break;
-          case "shutdown":
-            done = true;
-            queue.put(new TaskShutdown());
-            break;
-          default:
-            logger.warn("Unknown task: " + type);
-            break;
-
+        Task t = TaskFactory.build(json, new UdpConn(queue, packet.getSocketAddress(), socket));
+        if(t != null) {
+          queue.put(t);
         }
       }
     } catch (Exception e) {

@@ -9,6 +9,7 @@ import pt.ua.it.tnav.wsgw.task.TaskUnsuball;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.SocketAddress;
 import java.util.concurrent.BlockingQueue;
 
@@ -62,5 +63,10 @@ public class UdpConn implements Conn, AutoCloseable {
     } catch (InterruptedException e) {
       logger.error(Utils.stackTrace(e));
     }
+  }
+
+  @Override
+  public String toString() {
+    return address.toString();
   }
 }

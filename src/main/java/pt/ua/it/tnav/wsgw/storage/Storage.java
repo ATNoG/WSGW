@@ -2,6 +2,7 @@ package pt.ua.it.tnav.wsgw.storage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pt.it.av.tnav.utils.json.JSONArray;
 import pt.it.av.tnav.utils.json.JSONObject;
 import pt.it.av.tnav.utils.structures.queue.CircularPriorityQueue;
 import pt.it.av.tnav.utils.structures.tuple.Pair;
@@ -93,5 +94,26 @@ public class Storage extends HashMap<String, Pair<List<Conn>, Queue<JSONObject>>
   @Override
   public List<String> keys() {
     return new ArrayList<>(keySet());
+  }
+
+  @Override
+  public JSONObject status() {
+    JSONObject json = new JSONObject();
+
+    List<String> topics = keys();
+
+    for(String t :topics) {
+      JSONArray conns = new JSONArray();
+      JSONObject topic = new JSONObject();
+      Pair<List<Conn>, Queue<JSONObject>> pair = get(t);
+      topic.put("topic", t);
+      topic.put("queue size", pair.b.size());
+      for(Conn c : pair.a) {
+        conns.add(c.toString());
+      }
+      topic.put("connections", conns);
+    }
+
+    return json;
   }
 }

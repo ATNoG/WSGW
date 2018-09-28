@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import pt.it.av.tnav.utils.Utils;
 import pt.it.av.tnav.utils.json.JSONObject;
 import pt.ua.it.tnav.wsgw.task.Task;
+import pt.ua.it.tnav.wsgw.task.TaskFactory;
 import pt.ua.it.tnav.wsgw.task.TaskPub;
 import pt.ua.it.tnav.wsgw.task.TaskSub;
 import pt.ua.it.tnav.wsgw.task.TaskTopics;
@@ -46,28 +47,9 @@ public class WsConn extends WebSocketAdapter implements Conn {
   public void onWebSocketText(String message) {
     try {
       JSONObject json = JSONObject.read(message);
-      String type = json.get("type").asString();
-      switch (type) {
-        case "pub":
-          queue.put(new TaskPub(json));
-          break;
-        case "sub":
-          queue.put(new TaskSub(json.get("topic").asString(), this));
-          break;
-        case "unsub":
-          queue.put(new TaskUnsub(json.get("topic").asString(), this));
-          break;
-        case "unsuball":
-          queue.put(new TaskUnsuball(this));
-          break;
-        case "topics":
-          queue.put(new TaskTopics(this));
-          break;
-        case "shutdown":
-          break;
-        default:
-          logger.warn("Unknown task: " + type);
-          break;
+      Task t = TaskFactory.build(json, this);
+      if(t != null) {
+        queue.put(t);
       }
     } catch (InterruptedException e) {
       logger.error(Utils.stackTrace(e));
