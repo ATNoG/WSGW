@@ -11,6 +11,7 @@ import pt.ua.it.tnav.wsgw.storage.Topics;
 import pt.ua.it.tnav.wsgw.task.Task;
 import pt.ua.it.tnav.wsgw.task.TaskPub;
 import pt.ua.it.tnav.wsgw.task.TaskShutdown;
+import pt.ua.it.tnav.wsgw.task.TaskStatus;
 import pt.ua.it.tnav.wsgw.task.TaskSub;
 import pt.ua.it.tnav.wsgw.task.TaskTopics;
 import pt.ua.it.tnav.wsgw.task.TaskUnsub;
@@ -120,7 +121,8 @@ public class Dispatcher implements Runnable {
           break;
         }
         case "status": {
-
+          TaskStatus tasks = (TaskStatus) task;
+          tasks.conn().sendJSON(topics.status());
           break;
         }
         case "shutdown": {

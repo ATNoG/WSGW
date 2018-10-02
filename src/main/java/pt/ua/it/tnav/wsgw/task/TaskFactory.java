@@ -37,6 +37,7 @@ public class TaskFactory {
         t = new TaskStatus(conn);
         break;
       case "shutdown":
+        t = new TaskShutdown();
         break;
       default:
         logger.warn("Unknown task: " + type);

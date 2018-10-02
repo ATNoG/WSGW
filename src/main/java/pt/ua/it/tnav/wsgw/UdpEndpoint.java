@@ -6,12 +6,6 @@ import pt.it.av.tnav.utils.Utils;
 import pt.it.av.tnav.utils.json.JSONObject;
 import pt.ua.it.tnav.wsgw.task.Task;
 import pt.ua.it.tnav.wsgw.task.TaskFactory;
-import pt.ua.it.tnav.wsgw.task.TaskPub;
-import pt.ua.it.tnav.wsgw.task.TaskShutdown;
-import pt.ua.it.tnav.wsgw.task.TaskSub;
-import pt.ua.it.tnav.wsgw.task.TaskTopics;
-import pt.ua.it.tnav.wsgw.task.TaskUnsub;
-import pt.ua.it.tnav.wsgw.task.TaskUnsuball;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -66,6 +60,7 @@ public class UdpEndpoint implements Runnable {
    */
   public void join() {
     try {
+      done = true;
       DatagramSocket tmpSocket = new DatagramSocket();
       byte[] data = "{\"type\":\"shutdown\"}".getBytes();
       DatagramPacket tmpPacket = new DatagramPacket(data, data.length, address);
@@ -88,8 +83,9 @@ public class UdpEndpoint implements Runnable {
       DatagramPacket packet = new DatagramPacket(data, data.length);
       while (!done) {
         socket.receive(packet);
-        JSONObject json = JSONObject.read(new String(
-            packet.getData(), packet.getOffset(), packet.getLength()));
+        String message = new String(packet.getData(), packet.getOffset(), packet.getLength());
+        logger.info("debug: " + message);
+        JSONObject json = JSONObject.read(message);
         Task t = TaskFactory.build(json, new UdpConn(queue, packet.getSocketAddress(), socket));
         if(t != null) {
           queue.put(t);

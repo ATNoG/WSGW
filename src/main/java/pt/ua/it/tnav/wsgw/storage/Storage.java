@@ -99,7 +99,7 @@ public class Storage extends HashMap<String, Pair<List<Conn>, Queue<JSONObject>>
   @Override
   public JSONObject status() {
     JSONObject json = new JSONObject();
-
+    JSONArray jTopics = new JSONArray();
     List<String> topics = keys();
 
     for(String t :topics) {
@@ -107,12 +107,14 @@ public class Storage extends HashMap<String, Pair<List<Conn>, Queue<JSONObject>>
       JSONObject topic = new JSONObject();
       Pair<List<Conn>, Queue<JSONObject>> pair = get(t);
       topic.put("topic", t);
-      topic.put("queue size", pair.b.size());
+      topic.put("queue", pair.b.size());
       for(Conn c : pair.a) {
         conns.add(c.toString());
       }
       topic.put("connections", conns);
+      jTopics.add(topic);
     }
+    json.put("topics", jTopics);
 
     return json;
   }

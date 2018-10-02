@@ -49,9 +49,9 @@ public class Gateway {
             Integer.parseInt(prop.getProperty("UDPPort"))));
 
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      wsEndpoint.join();
       udpEndpoint.join();
       pubSubManager.join();
-      wsEndpoint.join();
       logger.info("Gateway graceful shutdown.");
     }));
 

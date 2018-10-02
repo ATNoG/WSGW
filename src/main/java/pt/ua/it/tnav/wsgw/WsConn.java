@@ -8,10 +8,6 @@ import pt.it.av.tnav.utils.Utils;
 import pt.it.av.tnav.utils.json.JSONObject;
 import pt.ua.it.tnav.wsgw.task.Task;
 import pt.ua.it.tnav.wsgw.task.TaskFactory;
-import pt.ua.it.tnav.wsgw.task.TaskPub;
-import pt.ua.it.tnav.wsgw.task.TaskSub;
-import pt.ua.it.tnav.wsgw.task.TaskTopics;
-import pt.ua.it.tnav.wsgw.task.TaskUnsub;
 import pt.ua.it.tnav.wsgw.task.TaskUnsuball;
 
 import java.io.IOException;
@@ -45,6 +41,7 @@ public class WsConn extends WebSocketAdapter implements Conn {
 
   @Override
   public void onWebSocketText(String message) {
+    logger.debug("Packet: " + message);
     try {
       JSONObject json = JSONObject.read(message);
       Task t = TaskFactory.build(json, this);
@@ -97,6 +94,6 @@ public class WsConn extends WebSocketAdapter implements Conn {
 
   @Override
   public String toString() {
-    return getSession().getRemoteAddress() + "; Is Connected: " + isConnected();
+    return "WS[" + getSession().getRemoteAddress() + "; " + isConnected() + "]";
   }
 }

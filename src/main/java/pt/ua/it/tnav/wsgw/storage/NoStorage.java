@@ -81,7 +81,7 @@ public class NoStorage extends HashMap<String, List<Conn>> implements Topics {
   @Override
   public JSONObject status() {
     JSONObject json = new JSONObject();
-
+    JSONArray jTopics = new JSONArray();
     List<String> topics = keys();
 
     for(String t :topics) {
@@ -89,11 +89,14 @@ public class NoStorage extends HashMap<String, List<Conn>> implements Topics {
       JSONObject topic = new JSONObject();
       List<Conn> conn = get(t);
       topic.put("topic", t);
+      topic.put("queue", 0);
       for(Conn c : conn) {
         conns.add(c.toString());
       }
       topic.put("connections", conns);
+      jTopics.add(topic);
     }
+    json.put("topics", jTopics);
 
     return json;
   }
