@@ -56,7 +56,9 @@ public class NoStorage extends HashMap<String, List<Conn>> implements Topics {
       conns = new ArrayList<>();
       put(topic, conns);
     }
-    conns.add(conn);
+    if(!conns.contains(conn)) {
+      conns.add(conn);
+    }
   }
 
   @Override

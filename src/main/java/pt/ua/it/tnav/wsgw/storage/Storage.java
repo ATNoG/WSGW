@@ -74,7 +74,9 @@ public class Storage extends HashMap<String, Pair<List<Conn>, Queue<JSONObject>>
       item = new Pair<>(new ArrayList<>(), new CircularPriorityQueue<>(qSize, c));
       put(topic, item);
     }
-    item.a.add(conn);
+    if(!item.a.contains(conn)) {
+      item.a.add(conn);
+    }
   }
 
   @Override

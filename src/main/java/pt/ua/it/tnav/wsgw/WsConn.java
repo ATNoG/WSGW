@@ -96,4 +96,17 @@ public class WsConn extends WebSocketAdapter implements Conn {
   public String toString() {
     return "WS[" + getSession().getRemoteAddress() + "; " + isConnected() + "]";
   }
+
+  @Override
+  public boolean equals(Object o) {
+    boolean rv = false;
+    if (o != null) {
+      if (o == this)
+        rv = true;
+      else if (o instanceof WsConn) {
+        rv = super.equals(o);
+      }
+    }
+    return rv;
+  }
 }

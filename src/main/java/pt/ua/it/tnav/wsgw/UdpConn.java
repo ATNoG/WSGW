@@ -68,4 +68,18 @@ public class UdpConn implements Conn, AutoCloseable {
   public String toString() {
     return "UDP[" + address.toString() + "]";
   }
+
+  @Override
+  public boolean equals(Object o) {
+    boolean rv = false;
+    if (o != null) {
+      if (o == this)
+        rv = true;
+      else if (o instanceof UdpConn) {
+        UdpConn c = (UdpConn) o;
+        rv = this.address.equals(c.address) && this.socket.equals(c.socket);
+      }
+    }
+    return rv;
+  }
 }
