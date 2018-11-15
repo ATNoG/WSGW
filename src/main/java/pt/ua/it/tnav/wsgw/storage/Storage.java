@@ -94,6 +94,11 @@ public class Storage extends HashMap<String, Pair<List<Conn>, Queue<JSONObject>>
   }
 
   @Override
+  public void releaseall() {
+    this.clear();
+  }
+
+  @Override
   public List<String> keys() {
     return new ArrayList<>(keySet());
   }

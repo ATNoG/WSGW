@@ -11,7 +11,11 @@ import pt.ua.it.tnav.wsgw.WsConn;
  */
 public class TaskFactory {
   private static final Logger logger = LoggerFactory.getLogger(WsConn.class);
-  private TaskFactory(){};
+
+  private TaskFactory() {
+  }
+
+  ;
 
   public static Task build(JSONObject json, Conn conn) {
     Task t = null;
@@ -29,6 +33,9 @@ public class TaskFactory {
         break;
       case "unsuball":
         t = new TaskUnsuball(conn);
+        break;
+      case "releaseall":
+        t = new TaskReleaseAll();
         break;
       case "topics":
         t = new TaskTopics(conn);

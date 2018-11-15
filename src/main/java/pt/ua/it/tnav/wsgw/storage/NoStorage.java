@@ -76,6 +76,11 @@ public class NoStorage extends HashMap<String, List<Conn>> implements Topics {
   }
 
   @Override
+  public void releaseall() {
+    this.clear();
+  }
+
+  @Override
   public List<String> keys() {
     return new ArrayList<>(keySet());
   }

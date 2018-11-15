@@ -28,7 +28,7 @@ public class UdpEndpoint implements Runnable {
   private final Thread thread;
   private final BlockingQueue<Task> queue;
   private final SocketAddress address;
-  private boolean done = true;
+  private boolean done;
 
   /**
    * UdpEndpoint constructor.

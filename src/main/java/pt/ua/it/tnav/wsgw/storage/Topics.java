@@ -47,6 +47,11 @@ public interface Topics {
   void unsubscribe(Conn conn);
 
   /**
+   * Release all topics and subscriptions.
+   */
+  void releaseall();
+
+  /**
    * List all available topics.
    *
    * @return {@link List} with all possible topics.

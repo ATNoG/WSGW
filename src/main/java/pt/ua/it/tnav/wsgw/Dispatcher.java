@@ -85,7 +85,7 @@ public class Dispatcher implements Runnable {
       Task task;
       try {
         task = queue.take();
-        logger.debug(task.toString());
+        logger.info(task.toString());
       } catch (InterruptedException e) {
         logger.error(Utils.stackTrace(e));
         task = new TaskShutdown();
@@ -108,6 +108,9 @@ public class Dispatcher implements Runnable {
           break;
         case "unsuball":
           topics.unsubscribe(((TaskUnsuball) task).conn());
+          break;
+        case "releaseall":
+          topics.releaseall();
           break;
         case "topics": {
           TaskTopics taskt = (TaskTopics) task;
