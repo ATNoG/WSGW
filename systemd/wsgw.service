@@ -3,7 +3,7 @@ Description=wsgw
 After=network.target
 
 [Service]
-Environment=WSGW_PATH=/home/pit/git/wsgw
+Environment=WSGW_PATH=/home/pi/git/wsgw
 Type=simple
 WorkingDirectory=/home/pi/git/wsgw
 ExecStart=/bin/sh -c "exec java -Djava.util.logging.config.file=${WSGW_PATH}/logging.properties -jar ${WSGW_PATH}/target/wsgw-1.1.jar ${WSGW_PATH}/wsgw.properties"
