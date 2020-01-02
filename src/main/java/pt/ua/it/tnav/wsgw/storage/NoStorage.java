@@ -1,7 +1,5 @@
 package pt.ua.it.tnav.wsgw.storage;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import pt.it.av.tnav.utils.json.JSONArray;
 import pt.it.av.tnav.utils.json.JSONObject;
 import pt.ua.it.tnav.wsgw.Conn;
@@ -22,7 +20,7 @@ import java.util.Map;
  * @version 1.0
  */
 public class NoStorage extends HashMap<String, List<Conn>> implements Topics {
-  private final Logger logger = LoggerFactory.getLogger(Storage.class);
+  private static final long serialVersionUID = 1L;
 
   /**
    * NoStorage constructor.

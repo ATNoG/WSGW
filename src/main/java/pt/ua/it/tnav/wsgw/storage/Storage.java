@@ -1,7 +1,5 @@
 package pt.ua.it.tnav.wsgw.storage;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import pt.it.av.tnav.utils.json.JSONArray;
 import pt.it.av.tnav.utils.json.JSONObject;
 import pt.it.av.tnav.utils.structures.queue.CircularPriorityQueue;
@@ -28,7 +26,7 @@ import java.util.Queue;
  * @version 1.0
  */
 public class Storage extends HashMap<String, Pair<List<Conn>, Queue<JSONObject>>> implements Topics {
-  private final Logger logger = LoggerFactory.getLogger(Storage.class);
+  private static final long serialVersionUID = 1L;
   private final int qSize;
   private final Comparator<JSONObject> c =
       (JSONObject o1, JSONObject o2) -> Long.compare(o1.get("ts").asLong(), o2.get("ts").asLong());
